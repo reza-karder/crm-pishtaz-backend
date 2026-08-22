@@ -2,9 +2,9 @@ import ApiError from "./ApiError.js"
 
 // wrapper the controllers with it
 function catchAsync(wrappedFn) {
-  return  (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      wrappedFn(req,res,next)
+      await wrappedFn(req,res,next)
     } catch (error) {
       console.log(error)
       handleError(res, error) 
