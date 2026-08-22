@@ -23,7 +23,7 @@ export default function createApp() {
         mongoUrl: env.mongoUri,
         collectionName: "sessions",
         ttll: env.sessionMaxAgeMs / 1000
-      })
+      }),
       cookie: {
         httpOnly: true,
         secure: env.nodeEnv === "PRODUCTION",
