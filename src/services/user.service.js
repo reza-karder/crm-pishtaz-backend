@@ -3,30 +3,29 @@ import ApiError from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.utils.js";
 
 class UserServices {
-	static async updateUser(req, res, id) {
-		const { body } = req;
-		const user = await UserModel.findById(id);
+	static async updateUser(userUpdates, userId) {
+		const user = await UserModel.findById(userId);
 
 		// check email unique
-		const isEmailDuplicated = await UserModel.exists({ email: body.email });
-		if (isEmailDuplicated && body.email !== user.email) {
-			return res.status(400).send({ success: false, message: "این ایمیل از قبل وجود دارد" });
+		const isEmailDuplicated = await UserModel.exists({ email: userUpdates.email });
+		if (isEmailDuplicated && userUpdates.email !== user.email) {
+      throw ApiError.badRequest("این ایمیل از قبل وجود دارد")
 		}
 
 		// check phone unique
-		const isPhoneDuplicated = await UserModel.exists({ phone: body.phone });
-		if (isPhoneDuplicated && body.phone !== user.phone) {
-			return res.status(400).send({ success: false, message: "این شماره موبایل از قبل وجود دارد" });
+		const isPhoneDuplicated = await UserModel.exists({ phone: userUpdates.phone });
+		if (isPhoneDuplicated && userUpdates.phone !== user.phone) {
+      throw ApiError.badRequest("این شماره موبایل از قبل وجود دارد")
 		}
 
-		const updatedUser = await UserModel.findByIdAndUpdate(id, body, { returnDocument: "after" });
+		const updatedUser = await UserModel.findByIdAndUpdate(userId, userUpdates, { returnDocument: "after" });
 
 		return updatedUser;
 	}
 
-  static async updatePassword(req, id) {
-    const { currentPassword, newPassword } = req.body
-    const user = await UserModel.findById(id)
+  static async updatePassword(passwords, userId) {
+    const { currentPassword, newPassword } = passwords
+    const user = await UserModel.findById(userId)
 
     if(!verifyPassword(currentPassword, user.password)) {
       throw ApiError.badRequest("رمز عبور فعلی صحیح نمی باشد")
