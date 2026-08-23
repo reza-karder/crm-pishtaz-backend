@@ -3,7 +3,8 @@ const errorMessages = {
   unauthorized: "لطفا وارد حساب کاربری خود شوید",
   forbidden: "اجازه دسترسی به این بخش را ندارید",
   notFound: "مورد درخواستی یافت نشد",
-  notValidate: "داده های ارسالی معتبر نمی باشند"
+  notValidate: "داده های ارسالی معتبر نمی باشند",
+  serverError: "مشکلی در سرور رخ داده "
 }
 
 export default errorMessages
