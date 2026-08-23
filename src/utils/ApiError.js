@@ -25,6 +25,9 @@ class ApiError extends Error {
     return new ApiError(404, message, details)
   }
   
+  static serverError(message = errorMessages.serverError, details = {}) {
+    return new ApiError(500, message, details)
+  }
 }
 
 export default ApiError
