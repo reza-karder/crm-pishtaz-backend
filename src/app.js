@@ -22,7 +22,7 @@ export default function createApp() {
       store: MongoStore.create({
         mongoUrl: env.mongoUri,
         collectionName: "sessions",
-        ttll: env.sessionMaxAgeMs / 1000
+        ttl: env.sessionMaxAgeMs / 1000,
       }),
       cookie: {
         httpOnly: true,
