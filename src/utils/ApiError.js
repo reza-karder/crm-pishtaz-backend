@@ -1,4 +1,4 @@
-import errorMessages from "../contstants/errorMessages.js";
+import errorMessages from "../constants/errorMessages.js";
 
 /**
  * @param {number} statusCode
