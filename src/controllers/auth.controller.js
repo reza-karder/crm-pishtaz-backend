@@ -20,6 +20,14 @@ class AuthController {
       return res.status(200).send({ success: true, message: "از حساب کاربری خود خارج شدید" })
     })
   }
+
+  static async checkSession(req, res) {
+    if(!req.session.userId) {
+      throw ApiError.unauthorized("شما وارد حساب کاربری خود نشدید")
+    }
+
+    res.status(200).send({ success: true, message: "شما در حساب کاربری خود هستید" })
+  }
 }
 
 export default AuthController;

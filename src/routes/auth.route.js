@@ -8,5 +8,6 @@ const router = Router();
 
 router.post("/auth/signin",validateMiddleWare(signinValidator), catchAsync(AuthController.signin));
 router.post("/auth/signout", catchAsync(AuthController.signout))
+router.get("/auth/session", catchAsync(AuthController.checkSession))
 
 export default router;
