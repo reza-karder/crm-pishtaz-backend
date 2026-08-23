@@ -1,6 +1,9 @@
 function validateMiddleWare(schema, segment = "body") {
   return (req, res, next) => {
-    const { error } = schema.validate(req[segment])
+    const { error } = schema.validate(req[segment], {
+      abortEarly: false,
+      stripUnknown: true,
+    })
     
     if(error) {
       const details = error.details.map(detail => detail.message)
