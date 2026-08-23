@@ -1,4 +1,6 @@
 import UserModel from "../models/User.model.js";
+import ApiError from "../utils/ApiError.js";
+import { hashPassword, verifyPassword } from "../utils/password.utils.js";
 
 class UserServices {
 	static async updateUser(req, res, id) {
@@ -21,6 +23,23 @@ class UserServices {
 
 		return updatedUser;
 	}
+
+  static async updatePassword(req, id) {
+    const { currentPassword, newPassword } = req.body
+    const user = await UserModel.findById(id)
+
+    if(!verifyPassword(currentPassword, user.password)) {
+      throw ApiError.badRequest("رمز عبور فعلی صحیح نمی باشد")
+    }
+
+    if(verifyPassword(newPassword, user.password)) {
+      throw ApiError.badRequest("رمز عبور جدید نمی تواند با فعلی برابر باشد")
+    }
+
+    const hashedPassword = hashPassword(newPassword)
+    user.password = hashedPassword
+    await user.save()
+  }
 }
 
 export default UserServices;
