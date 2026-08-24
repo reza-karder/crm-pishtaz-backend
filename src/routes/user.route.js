@@ -41,4 +41,10 @@ router.get(
   catchAsync(UserController.getAllUsers)
 )
 
+router.get(
+  "/user/me/stats", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getUserStats)
+)
+
 export default router;

@@ -24,6 +24,11 @@ class UserController {
     const users = await UserServices.getUsersByFilter()
     return res.status(200).send({ success: true, users })
   }
+
+  static async getUserStats(req, res) {
+    const stats = await UserServices.getUserStats(req.session.userId)
+    return res.status(200).send({ success: true, stats })
+  }
 }
 
 export default UserController;
