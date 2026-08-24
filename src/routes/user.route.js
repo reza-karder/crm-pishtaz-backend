@@ -28,4 +28,10 @@ router.post(
 	catchAsync(UserController.banUser)
 );
 
+router.get(
+  "/user/active", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getAllActiveUsers)
+);
+
 export default router;

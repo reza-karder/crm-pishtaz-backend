@@ -14,6 +14,11 @@ class UserController {
     await UserServices.banUser(req.params.id)
     return res.status(200).send({ success: true, message: "کارمند به حالت تعلیق در آمد" })
   }
+
+  static async getAllActiveUsers(req, res) {
+    const users = await UserServices.getUsersByFilter({ status: "active" })
+    return res.status(200).send({ success: true, users })
+  }
 }
 
 export default UserController;

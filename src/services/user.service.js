@@ -43,6 +43,11 @@ class UserServices {
   static async banUser(userId) {
     await UserModel.findByIdAndUpdate(userId, { status: "ban" })
   }
+
+  static async getUsersByFilter(filters) {
+    const users = await UserModel.find(filters)
+    return users
+  }
 }
 
 export default UserServices;
