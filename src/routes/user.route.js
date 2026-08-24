@@ -14,7 +14,7 @@ router.patch(
 	"/users/me",
 	requireAuthMiddleWare,
 	validateMiddleWare(updateUserValidator),
-	catchAsync(UserController.updateUser)
+	catchAsync(UserController.updateOwn)
 );
 
 router.patch(
@@ -52,6 +52,14 @@ router.get(
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
   catchAsync(UserController.getUserStats)
+)
+
+router.patch(
+  "/users/:id", 
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  validateMiddleWare(updateUserValidator),
+  catchAsync(UserController.updateUser)
 )
 
 // ===========================================

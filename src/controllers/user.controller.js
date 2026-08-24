@@ -1,6 +1,10 @@
 import UserServices from "../services/user.service.js";
+import { hashPassword } from "../utils/password.utils.js";
 class UserController {
-	static async updateUser(req, res) {
+	static async updateOwn(req, res) {
+    if(req.body.password) {
+      delete req.body.password
+    }
 		const updatedUser = await UserServices.updateUser(req.body, req.session.userId);
 		return res.status(200).send({ success: true, user: updatedUser, message: "اطلاعات شما تغییر کرد" });
 	}
@@ -33,6 +37,14 @@ class UserController {
   static async getUserStats(req, res) {
     const results = await UserServices.getUserStats(req.params.id)
     return res.status(200).send({ success: true, ...results })
+  }
+
+  static async updateUser(req, res) {
+    if(req.body.password) {
+      req.body.password = hashPassword(req.body.password)
+    }
+    const updatedUser = await UserServices.updateUser(req.body, req.params.id)
+    return res.status(200).send({ success: true, message: "اطلاعات کارمند تغییر کرد" })
   }
 }
 
