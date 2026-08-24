@@ -54,7 +54,7 @@ class UserServices {
 	}
 
 	static async getUserStats(userId) {
-		const user = await UserModel.findById(userId).populate();
+		const user = await UserModel.findById(userId).populate({ path: "customers" });
 		const calls = await CallModel.find({ employee: userId }).populate({
 			path: "customer",
 			select: ["name"],
