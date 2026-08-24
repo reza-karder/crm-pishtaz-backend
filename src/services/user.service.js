@@ -67,7 +67,7 @@ class UserServices {
 			todayCalls: getScheduledCallsOfDay(new Date(), calls),
 		};
 
-		return stats;
+		return { stats, user };
 	}
 }
 
