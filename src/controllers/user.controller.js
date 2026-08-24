@@ -46,6 +46,11 @@ class UserController {
     const updatedUser = await UserServices.updateUser(req.body, req.params.id)
     return res.status(200).send({ success: true, message: "اطلاعات کارمند تغییر کرد" })
   }
+
+  static async createUser(req, res) {
+    const user = await UserServices.createUser(req.body)
+    return res.status(200).send({ success: true, user })
+  }
 }
 
 export default UserController;

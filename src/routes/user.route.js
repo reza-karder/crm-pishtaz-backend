@@ -2,7 +2,7 @@ import { Router } from "express";
 import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/auth.middleware.js";
 import UserController from "../controllers/user.controller.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { updatePasswordValidator, updateUserValidator } from "../validators/user.validator.js";
+import { createUserValidator, updatePasswordValidator, updateUserValidator } from "../validators/user.validator.js";
 import { catchAsync } from "../utils/errorHandler.js";
 
 const router = Router();
@@ -60,6 +60,14 @@ router.patch(
   requireRoleMiddleWare("admin"),
   validateMiddleWare(updateUserValidator),
   catchAsync(UserController.updateUser)
+)
+
+router.post(
+  "/users",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  validateMiddleWare(createUserValidator),
+  catchAsync(UserController.createUser)
 )
 
 // ===========================================

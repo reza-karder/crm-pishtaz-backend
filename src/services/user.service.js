@@ -5,20 +5,30 @@ import { getCallsOfLast6Days, getScheduledCallsOfDay } from "../utils/date.utils
 import { hashPassword, verifyPassword } from "../utils/password.utils.js";
 
 class UserServices {
-	static async updateUser(userUpdates, userId) {
-		const user = await UserModel.findById(userId);
-
+	static async checkDuplications(userData, exceptionId) {
 		// check email unique
-		const isEmailDuplicated = await UserModel.exists({ email: userUpdates.email });
-		if (isEmailDuplicated && userUpdates.email !== user.email) {
+		const isEmailDuplicated = await UserModel.exists({
+			email: userData.email,
+			_id: { $ne: exceptionId },
+		});
+		if (isEmailDuplicated) {
 			throw ApiError.badRequest("این ایمیل از قبل وجود دارد");
 		}
 
 		// check phone unique
-		const isPhoneDuplicated = await UserModel.exists({ phone: userUpdates.phone });
-		if (isPhoneDuplicated && userUpdates.phone !== user.phone) {
+		const isPhoneDuplicated = await UserModel.exists({
+			phone: userData.phone,
+			_id: { $ne: exceptionId },
+		});
+		if (isPhoneDuplicated) {
 			throw ApiError.badRequest("این شماره موبایل از قبل وجود دارد");
 		}
+	}
+
+	static async updateUser(userUpdates, userId) {
+		const user = await UserModel.findById(userId);
+
+		await this.checkDuplications(userUpdates, userId)
 
 		const updatedUser = await UserModel.findByIdAndUpdate(userId, userUpdates, {
 			returnDocument: "after",
@@ -69,6 +79,13 @@ class UserServices {
 
 		return { stats, user };
 	}
+
+	static async createUser(userData) {
+    await this.checkDuplications(userData)
+    userData.password = hashPassword(userData.password)
+    const user = await UserModel.create(userData)
+    return user
+  }
 }
 
 export default UserServices;
