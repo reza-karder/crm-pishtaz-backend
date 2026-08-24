@@ -34,4 +34,11 @@ router.get(
   catchAsync(UserController.getAllActiveUsers)
 );
 
+router.get(
+  "/user/all",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  catchAsync(UserController.getAllUsers)
+)
+
 export default router;

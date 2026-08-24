@@ -19,6 +19,11 @@ class UserController {
     const users = await UserServices.getUsersByFilter({ status: "active" })
     return res.status(200).send({ success: true, users })
   }
+
+  static async getAllUsers(req, res) {
+    const users = await UserServices.getUsersByFilter()
+    return res.status(200).send({ success: true, users })
+  }
 }
 
 export default UserController;
