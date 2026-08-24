@@ -27,7 +27,7 @@ router.patch(
 router.get(
   "/users/me/stats", 
   requireAuthMiddleWare, 
-  catchAsync(UserController.getUserStats)
+  catchAsync(UserController.getOwnStats)
 )
 
 // ===========================================
@@ -45,6 +45,13 @@ router.get(
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
   catchAsync(UserController.getAllUsers)
+)
+
+router.get(
+  "/users/:id",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  catchAsync(UserController.getUserStats)
 )
 
 // ===========================================

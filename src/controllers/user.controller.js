@@ -25,8 +25,13 @@ class UserController {
     return res.status(200).send({ success: true, users })
   }
 
-  static async getUserStats(req, res) {
+  static async getOwnStats(req, res) {
     const results = await UserServices.getUserStats(req.session.userId)
+    return res.status(200).send({ success: true, ...results })
+  }
+
+  static async getUserStats(req, res) {
+    const results = await UserServices.getUserStats(req.params.id)
     return res.status(200).send({ success: true, ...results })
   }
 }
