@@ -8,14 +8,14 @@ import { catchAsync } from "../utils/errorHandler.js";
 const router = Router();
 
 router.patch(
-	"/user",
+	"/user/me",
 	requireAuthMiddleWare,
 	validateMiddleWare(updateUserValidator),
 	catchAsync(UserController.updateUser)
 );
 
 router.patch(
-	"/user/password",
+	"/user/me/password",
 	requireAuthMiddleWare,
 	validateMiddleWare(updatePasswordValidator),
 	catchAsync(UserController.updatePassword)
