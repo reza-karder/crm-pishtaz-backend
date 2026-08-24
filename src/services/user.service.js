@@ -39,6 +39,10 @@ class UserServices {
     user.password = hashedPassword
     await user.save()
   }
+
+  static async banUser(userId) {
+    await UserModel.findByIdAndUpdate(userId, { status: "ban" })
+  }
 }
 
 export default UserServices;

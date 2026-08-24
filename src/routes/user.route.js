@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuthMiddleWare } from "../middlewares/auth.middleware.js";
+import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/auth.middleware.js";
 import UserController from "../controllers/user.controller.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
 import { updatePasswordValidator, updateUserValidator } from "../validators/user.validator.js";
@@ -15,10 +15,17 @@ router.patch(
 );
 
 router.patch(
-  "/user/password",
-  requireAuthMiddleWare,
-  validateMiddleWare(updatePasswordValidator),
-  catchAsync(UserController.updatePassword)
-)
+	"/user/password",
+	requireAuthMiddleWare,
+	validateMiddleWare(updatePasswordValidator),
+	catchAsync(UserController.updatePassword)
+);
+
+router.post(
+	"/user/ban/:id",
+	requireAuthMiddleWare,
+	requireRoleMiddleWare("admin"),
+	catchAsync(UserController.banUser)
+);
 
 export default router;
