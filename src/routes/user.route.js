@@ -7,44 +7,53 @@ import { catchAsync } from "../utils/errorHandler.js";
 
 const router = Router();
 
+// ===========================================
+// employee role routes
+// ===========================================
 router.patch(
-	"/user/me",
+	"/users/me",
 	requireAuthMiddleWare,
 	validateMiddleWare(updateUserValidator),
 	catchAsync(UserController.updateUser)
 );
 
 router.patch(
-	"/user/me/password",
+	"/users/me/password",
 	requireAuthMiddleWare,
 	validateMiddleWare(updatePasswordValidator),
 	catchAsync(UserController.updatePassword)
 );
 
+router.get(
+  "/users/me/stats", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getUserStats)
+)
+
+// ===========================================
+// admin role routes
+// ===========================================
 router.post(
-	"/user/ban/:id",
+	"/users/ban/:id",
 	requireAuthMiddleWare,
 	requireRoleMiddleWare("admin"),
 	catchAsync(UserController.banUser)
 );
 
 router.get(
-  "/user/active", 
-  requireAuthMiddleWare, 
-  catchAsync(UserController.getAllActiveUsers)
-);
-
-router.get(
-  "/user/all",
+  "/users/all",
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
   catchAsync(UserController.getAllUsers)
 )
 
+// ===========================================
+// public routes
+// ===========================================
 router.get(
-  "/user/me/stats", 
+  "/users/active", 
   requireAuthMiddleWare, 
-  catchAsync(UserController.getUserStats)
-)
+  catchAsync(UserController.getAllActiveUsers)
+);
 
 export default router;
