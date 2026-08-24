@@ -28,6 +28,10 @@ class ApiError extends Error {
   static serverError(message = errorMessages.serverError, details = {}) {
     return new ApiError(500, message, details)
   }
+
+  static forbidden(message = errorMessages.forbidden, details = {}) {
+    return new ApiError(403, message, details)
+  }
 }
 
 export default ApiError

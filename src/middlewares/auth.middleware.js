@@ -15,7 +15,7 @@ const requireRoleMiddleWare = (role) => {
 		const user = await UserModel.findById(req.session.userId)
 
 		if (user.role !== role) {
-			throw ApiError.unauthorized()
+			throw ApiError.forbidden()
 		}
 
 		next()
