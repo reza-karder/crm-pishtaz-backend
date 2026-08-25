@@ -75,7 +75,7 @@ router.delete(
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
   validateMiddleWare(deleteUserValidator),
-  UserController.deleteUser
+  catchAsync(UserController.deleteUser)
 )
 
 // ===========================================
