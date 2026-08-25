@@ -22,8 +22,13 @@ const updatePasswordValidator = Joi.object({
   newPassword: Joi.string().required().regex(PASSWORD_REGEX)
 })
 
+const deleteUserValidator = Joi.object({
+  substituteEmployeeId: Joi.string().required()
+})
+
 export { 
   updateUserValidator,
   updatePasswordValidator,
-  createUserValidator
+  createUserValidator,
+  deleteUserValidator
 }

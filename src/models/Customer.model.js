@@ -26,6 +26,7 @@ const CustomerSchema = mongoose.Schema(
 		potentialProducts: [PotentialProductSchema],
     purchasedProducts: [PurchasedProductSchema],
     status: { type: String, enum: CUSTOMER_STATUS, default: "active" },
+    employee: { type: mongoose.Types.ObjectId, ref: "User" },
     calls: [{ type: mongoose.Types.ObjectId, ref: "Call" }]
 	},
 	{ timestamps: true },

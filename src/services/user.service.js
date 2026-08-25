@@ -86,6 +86,10 @@ class UserServices {
     const user = await UserModel.create(userData)
     return user
   }
+
+  static async deleteUser(userId) {
+    await UserModel.findByIdAndDelete(userId)
+  }
 }
 
 export default UserServices;

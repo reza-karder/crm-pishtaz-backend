@@ -2,7 +2,7 @@ import { Router } from "express";
 import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/auth.middleware.js";
 import UserController from "../controllers/user.controller.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { createUserValidator, updatePasswordValidator, updateUserValidator } from "../validators/user.validator.js";
+import { createUserValidator, deleteUserValidator, updatePasswordValidator, updateUserValidator } from "../validators/user.validator.js";
 import { catchAsync } from "../utils/errorHandler.js";
 
 const router = Router();
@@ -68,6 +68,14 @@ router.post(
   requireRoleMiddleWare("admin"),
   validateMiddleWare(createUserValidator),
   catchAsync(UserController.createUser)
+)
+
+router.delete(
+  "/users/:id",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  validateMiddleWare(deleteUserValidator),
+  UserController.deleteUser
 )
 
 // ===========================================
