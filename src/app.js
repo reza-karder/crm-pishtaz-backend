@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import routes from "./routes/index.js";
+import routes from "./routes/index.route.js";
 import env from "./config/env.js";
 import MongoStore from "connect-mongo"
 
