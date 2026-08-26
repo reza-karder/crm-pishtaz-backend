@@ -16,12 +16,14 @@ const purchasedProductValidator = Joi.object({
 
 const callValidator = Joi.object({
 	notes: Joi.string().optional(),
-	status: Joi.string().valid(...CALL_STATUS).required(),
+	status: Joi.string()
+		.valid(...CALL_STATUS)
+		.required(),
 	scheduledAt: Joi.date().optional(),
 	doneAt: Joi.date().optional(),
 });
 
-const createUCustomerValidator = Joi.object({
+const createCustomerValidator = Joi.object({
 	name: Joi.string().required(),
 	phonePrimary: Joi.string().required().regex(PHONE_REGEX),
 	phoneSecondary: Joi.string().optional().regex(PHONE_REGEX),
@@ -44,4 +46,15 @@ const updateCustomerValidator = Joi.object({
 	job: Joi.string().optional(),
 });
 
-export { createUCustomerValidator, updateCustomerValidator };
+const addPurchasedProductValidator = Joi.object({
+	product: Joi.string().required(),
+	price: Joi.number().optional(),
+	date: Joi.date().optional(),
+});
+
+const addPotentialProductValidator = Joi.object({
+	product: Joi.string().required(),
+	intentionScore: Joi.number().valid(1,2,3,4,5).required()
+});
+
+export { createCustomerValidator, updateCustomerValidator, addPurchasedProductValidator, addPotentialProductValidator };

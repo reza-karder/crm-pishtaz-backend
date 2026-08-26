@@ -6,7 +6,7 @@ import CallServices from "./call.service.js";
 class CustomerServices {
 	static async checkPhoneDuplication(phone, exceptionId) {
 		const isPhoneDuplicated = await CustomerModel.exists({
-      _id: { $ne: exceptionId },
+			_id: { $ne: exceptionId },
 			$or: [{ phonePrimary: phone }, { phoneSecondary: phone }],
 		});
 		return isPhoneDuplicated;
@@ -28,7 +28,10 @@ class CustomerServices {
 		}
 
 		// check phoneSecondary unique
-		const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(phoneSecondary, exceptionId);
+		const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(
+			phoneSecondary,
+			exceptionId
+		);
 		if (isPhoneSecondaryDuplicated) {
 			throw ApiError.badRequest("شماره تماس دوم از قبل وجود دارد");
 		}
@@ -58,14 +61,26 @@ class CustomerServices {
 		customer.calls = calls;
 
 		await customer.save();
-    return customer
+		return customer;
 	}
 
-  static async updateCustomer(customerId, customerData) {
-    await this.checkDuplications(customerData, customerId)
-    const customer = await CustomerModel.findByIdAndUpdate(customerId, customerData, { returnDocument: "after" })
-    return customer
-  }
+	static async updateCustomer(customerId, customerData) {
+		await this.checkDuplications(customerData, customerId);
+		const customer = await CustomerModel.findByIdAndUpdate(customerId, customerData, {
+			returnDocument: "after",
+		});
+		return customer;
+	}
+
+	/** @param {"purchasedProducts | potentialProducts"} productType */
+	static async addProduct(productData, productType, customerId) {
+		const product = await CustomerModel.findByIdAndUpdate(
+			customerId,
+			{ $push: { [productType]: productData } },
+			{ returnDocument: "after" }
+		);
+		return product;
+	}
 }
 
 export default CustomerServices;
