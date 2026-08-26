@@ -81,6 +81,16 @@ class CustomerServices {
 		);
 		return product;
 	}
+
+  static async updateProduct(productData, productType, customerId, productId) {
+    const customer = await CustomerModel.findById(customerId)
+    const product = customer[productType].id(productId)
+    
+    Object.assign(product, productData)
+    await customer.save()
+
+    return customer
+  }
 }
 
 export default CustomerServices;

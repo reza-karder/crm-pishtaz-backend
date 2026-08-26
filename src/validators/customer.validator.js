@@ -54,7 +54,24 @@ const addPurchasedProductValidator = Joi.object({
 
 const addPotentialProductValidator = Joi.object({
 	product: Joi.string().required(),
-	intentionScore: Joi.number().valid(1,2,3,4,5).required()
+	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).required(),
 });
 
-export { createCustomerValidator, updateCustomerValidator, addPurchasedProductValidator, addPotentialProductValidator };
+const updatePurchasedProductValidator = Joi.object({
+  product: Joi.string().optional(),
+	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).optional(),
+});
+
+const updatePotentialProductValidator = Joi.object({
+  product: Joi.string(),
+  intentionScore: Joi.number().valid(1, 2, 3, 4, 5),
+});
+
+export {
+	createCustomerValidator,
+	updateCustomerValidator,
+	addPurchasedProductValidator,
+	addPotentialProductValidator,
+	updatePurchasedProductValidator,
+  updatePotentialProductValidator
+};

@@ -8,6 +8,8 @@ import {
 	addPurchasedProductValidator,
 	createCustomerValidator,
 	updateCustomerValidator,
+  updatePotentialProductValidator,
+  updatePurchasedProductValidator,
 } from "../validators/customer.validator.js";
 
 const router = Router();
@@ -42,5 +44,19 @@ router.post(
 	validateMiddleWare(addPotentialProductValidator),
 	catchAsync(CustomerController.addPotentialProduct)
 );
+
+router.patch(
+  "/customers/:customerId/purchased-products/:productId",
+  requireAuthMiddleWare,
+  validateMiddleWare(updatePurchasedProductValidator),
+  catchAsync(CustomerController.updatePurchasedProduct)
+)
+
+router.patch(
+  "/customers/:customerId/potential-products/:productId",
+  requireAuthMiddleWare,
+  validateMiddleWare(updatePotentialProductValidator),
+  catchAsync(CustomerController.updatePotentialProduct)
+)
 
 export default router;

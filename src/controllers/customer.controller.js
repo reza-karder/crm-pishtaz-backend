@@ -20,6 +20,18 @@ class CustomerController {
     const product = await CustomerServices.addProduct(req.body, "potentialProducts", req.params.id)
     return res.status(200).send({ sucess: true, product })
   }
+
+  static async updatePurchasedProduct(req, res) {
+    const { customerId, productId } = req.params
+    const product = await CustomerServices.updateProduct(req.body, "purchasedProducts", customerId, productId)
+    return res.status(200).send({ sucess: true, product })
+  }
+
+  static async updatePotentialProduct(req, res) {
+    const { customerId, productId } = req.params
+    const product = await CustomerServices.updateProduct(req.body, "potentialProducts", customerId, productId)
+    return res.status(200).send({ sucess: true, product })
+  }
 }
 
 export default CustomerController
