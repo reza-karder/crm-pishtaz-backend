@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuthMiddleWare } from "../middlewares/auth.middleware.js";
+import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/auth.middleware.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import CustomerController from "../controllers/customer.controller.js";
@@ -13,6 +13,16 @@ import {
 } from "../validators/customer.validator.js";
 
 const router = Router();
+
+// =================================================
+// admin role routes
+// =================================================
+router.get(
+  "/customers",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  catchAsync(CustomerController.getAllCustomers)
+)
 
 // =================================================
 // public routes

@@ -37,6 +37,11 @@ class CustomerServices {
 		}
 	}
 
+  static async getAllCustomers() {
+    const customers = await CustomerModel.find()
+    return customers
+  }
+
   static async getAllOwnCustomers(employeeId) {
     const customers = await CustomerModel.find({ employee: employeeId })
     return customers
