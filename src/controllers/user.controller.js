@@ -1,4 +1,4 @@
-import CustomerServices from "../services/customer.services.js";
+import CustomerServices from "../services/customer.service.js";
 import UserServices from "../services/user.service.js";
 import { hashPassword } from "../utils/password.utils.js";
 class UserController {
