@@ -6,6 +6,11 @@ class CustomerController {
     return res.status(200).send({ success: true, customers })
   }
 
+  static async getSingleCustomer(req, res) {
+    const customer = await CustomerServices.getSingleCustomer(req.params.id)
+    return res.status(200).send({ success: true, customer })
+  }
+
 	static async createCustomer(req, res) {
 		const customer = await CustomerServices.createCustomer(req.body);
 		return res.status(200).send({ success: true, customer });

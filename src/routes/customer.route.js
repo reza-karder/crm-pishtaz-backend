@@ -23,6 +23,12 @@ router.get(
   catchAsync(CustomerController.getAllOwnCustomers)
 )
 
+router.get(
+  "/customers/:id",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.getSingleCustomer)
+)
+
 router.post(
 	"/customers",
 	requireAuthMiddleWare,

@@ -42,6 +42,11 @@ class CustomerServices {
     return customers
   }
 
+  static async getSingleCustomer(customerId) {
+    const customers = await CustomerModel.findById(customerId).populate({ path: "calls" })
+    return customers
+  }
+
 	static async transferAllOwnerShips(originEmployeeId, destinationEmployeeId) {
 		await CustomerModel.updateMany(
 			{ employee: originEmployeeId },
