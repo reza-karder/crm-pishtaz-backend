@@ -6,6 +6,7 @@ const CUSTOMER_STATUS = ["active", "cold"]
 const PurchasedProductSchema = mongoose.Schema({
 	product: { type: mongoose.Types.ObjectId, ref: "Product", required: true },
   price: { type: Number },
+  count: { type: Number },
   date: { type: Date }
 });
 

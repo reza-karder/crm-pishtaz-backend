@@ -11,6 +11,7 @@ const potentialProductValidator = Joi.object({
 const purchasedProductValidator = Joi.object({
 	product: Joi.string().required(),
 	price: Joi.number().optional(),
+  count: Joi.number().min(1),
 	date: Joi.date().optional(),
 });
 
@@ -49,6 +50,7 @@ const updateCustomerValidator = Joi.object({
 const addPurchasedProductValidator = Joi.object({
 	product: Joi.string().required(),
 	price: Joi.number().optional(),
+  count: Joi.number().min(1),
 	date: Joi.date().optional(),
 });
 
@@ -59,6 +61,7 @@ const addPotentialProductValidator = Joi.object({
 
 const updatePurchasedProductValidator = Joi.object({
   product: Joi.string().optional(),
+  count: Joi.number().min(1),
 	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).optional(),
 });
 

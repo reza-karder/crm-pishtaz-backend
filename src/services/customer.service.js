@@ -91,6 +91,10 @@ class CustomerServices {
 
     return customer
   }
+
+  static async deleteProduct(productType, customerId, productId) {
+    await CustomerModel.findByIdAndUpdate(customerId, { $pull: { [productType]: { _id: productId } } })
+  }
 }
 
 export default CustomerServices;

@@ -59,4 +59,16 @@ router.patch(
   catchAsync(CustomerController.updatePotentialProduct)
 )
 
+router.delete(
+  "/customers/:customerId/purchased-products/:productId",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.deletePurchasedProduct)
+)
+
+router.delete(
+  "/customers/:customerId/potential-products/:productId",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.deletePotentialProduct)
+)
+
 export default router;
