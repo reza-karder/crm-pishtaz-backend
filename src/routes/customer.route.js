@@ -3,7 +3,7 @@ import { requireAuthMiddleWare } from "../middlewares/auth.middleware.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import CustomerController from "../controllers/customer.controller.js";
-import { createUCustomerValidator } from "../validators/customer.validator.js";
+import { createUCustomerValidator, updateCustomerValidator } from "../validators/customer.validator.js";
 
 const router = Router();
 
@@ -16,5 +16,12 @@ router.post(
 	validateMiddleWare(createUCustomerValidator),
 	catchAsync(CustomerController.createCustomer)
 );
+
+router.patch(
+  "/customers/:id",
+  requireAuthMiddleWare,
+  validateMiddleWare(updateCustomerValidator),
+  catchAsync(CustomerController.updateCustomer)
+)
 
 export default router;

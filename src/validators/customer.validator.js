@@ -34,4 +34,14 @@ const createUCustomerValidator = Joi.object({
 	calls: Joi.array().required().items(callValidator),
 });
 
-export { createUCustomerValidator };
+const updateCustomerValidator = Joi.object({
+	name: Joi.string(),
+	phonePrimary: Joi.string().regex(PHONE_REGEX),
+	phoneSecondary: Joi.string().optional().regex(PHONE_REGEX),
+	email: Joi.string().email(),
+	notes: Joi.string().optional(),
+	address: Joi.string().optional(),
+	job: Joi.string().optional(),
+});
+
+export { createUCustomerValidator, updateCustomerValidator };

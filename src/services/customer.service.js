@@ -4,8 +4,9 @@ import ApiError from "../utils/ApiError.js";
 import CallServices from "./call.service.js";
 
 class CustomerServices {
-	static async checkPhoneDuplication(phone) {
+	static async checkPhoneDuplication(phone, exceptionId) {
 		const isPhoneDuplicated = await CustomerModel.exists({
+      _id: { $ne: exceptionId },
 			$or: [{ phonePrimary: phone }, { phoneSecondary: phone }],
 		});
 		return isPhoneDuplicated;
@@ -21,13 +22,13 @@ class CustomerServices {
 		}
 
 		// check phonePrimary unique
-		const isPhonePrimaryDuplicated = await this.checkPhoneDuplication(phonePrimary);
+		const isPhonePrimaryDuplicated = await this.checkPhoneDuplication(phonePrimary, exceptionId);
 		if (isPhonePrimaryDuplicated) {
 			throw ApiError.badRequest("شماره تماس اصلی از قبل وجود دارد");
 		}
 
 		// check phoneSecondary unique
-		const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(phoneSecondary);
+		const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(phoneSecondary, exceptionId);
 		if (isPhoneSecondaryDuplicated) {
 			throw ApiError.badRequest("شماره تماس دوم از قبل وجود دارد");
 		}
@@ -59,6 +60,12 @@ class CustomerServices {
 		await customer.save();
     return customer
 	}
+
+  static async updateCustomer(customerId, customerData) {
+    await this.checkDuplications(customerData, customerId)
+    const customer = await CustomerModel.findByIdAndUpdate(customerId, customerData, { returnDocument: "after" })
+    return customer
+  }
 }
 
 export default CustomerServices;
