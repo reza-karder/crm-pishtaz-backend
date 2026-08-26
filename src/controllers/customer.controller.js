@@ -26,6 +26,11 @@ class CustomerController {
 		return res.status(200).send({ success: true, customer });
 	}
 
+  static async deleteSingleCustomer(req, res) {
+    await CustomerServices.deleteManyCustomers([req.params.id])
+    return res.status(200).send({ success: true })
+  }
+
 	static async addPurchasedProduct(req, res) {
 		const product = await CustomerServices.addProduct(req.body, "purchasedProducts", req.params.id);
 		return res.status(200).send({ sucess: true, product });

@@ -1,3 +1,4 @@
+import CallModel from "../models/Call.model.js";
 import CustomerModel from "../models/Customer.model.js";
 import UserModel from "../models/User.model.js";
 import ApiError from "../utils/ApiError.js";
@@ -37,20 +38,20 @@ class CustomerServices {
 		}
 	}
 
-  static async getAllCustomers() {
-    const customers = await CustomerModel.find()
-    return customers
-  }
+	static async getAllCustomers() {
+		const customers = await CustomerModel.find();
+		return customers;
+	}
 
-  static async getAllOwnCustomers(employeeId) {
-    const customers = await CustomerModel.find({ employee: employeeId })
-    return customers
-  }
+	static async getAllOwnCustomers(employeeId) {
+		const customers = await CustomerModel.find({ employee: employeeId });
+		return customers;
+	}
 
-  static async getSingleCustomer(customerId) {
-    const customers = await CustomerModel.findById(customerId).populate({ path: "calls" })
-    return customers
-  }
+	static async getSingleCustomer(customerId) {
+		const customers = await CustomerModel.findById(customerId).populate({ path: "calls" });
+		return customers;
+	}
 
 	static async transferAllOwnerShips(originEmployeeId, destinationEmployeeId) {
 		await CustomerModel.updateMany(
@@ -87,6 +88,15 @@ class CustomerServices {
 		return customer;
 	}
 
+	static async deleteManyCustomers(customerIds) {
+		await CustomerModel.deleteMany({ _id: { $in: customerIds } });
+		await CallModel.deleteMany({ customerId: { $in: customerIds } });
+		await UserModel.updateMany(
+			{ customers: { $in: customerIds } },
+			{ $pull: { customers: { $in: customerIds } } }
+		);
+	}
+
 	/** @param {"purchasedProducts | potentialProducts"} productType */
 	static async addProduct(productData, productType, customerId) {
 		const product = await CustomerModel.findByIdAndUpdate(
@@ -97,19 +107,21 @@ class CustomerServices {
 		return product;
 	}
 
-  static async updateProduct(productData, productType, customerId, productId) {
-    const customer = await CustomerModel.findById(customerId)
-    const product = customer[productType].id(productId)
-    
-    Object.assign(product, productData)
-    await customer.save()
+	static async updateProduct(productData, productType, customerId, productId) {
+		const customer = await CustomerModel.findById(customerId);
+		const product = customer[productType].id(productId);
 
-    return product
-  }
+		Object.assign(product, productData);
+		await customer.save();
 
-  static async deleteProduct(productType, customerId, productId) {
-    await CustomerModel.findByIdAndUpdate(customerId, { $pull: { [productType]: { _id: productId } } })
-  }
+		return product;
+	}
+
+	static async deleteProduct(productType, customerId, productId) {
+		await CustomerModel.findByIdAndUpdate(customerId, {
+			$pull: { [productType]: { _id: productId } },
+		});
+	}
 }
 
 export default CustomerServices;

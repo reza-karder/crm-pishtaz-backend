@@ -53,6 +53,12 @@ router.patch(
 	catchAsync(CustomerController.updateCustomer)
 );
 
+router.delete(
+	"/customers/:id",
+	requireAuthMiddleWare,
+	catchAsync(CustomerController.deleteSingleCustomer)
+);
+
 router.post(
 	"/customers/:id/purchased-products",
 	requireAuthMiddleWare,
