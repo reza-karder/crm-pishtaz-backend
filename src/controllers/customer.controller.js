@@ -1,6 +1,11 @@
 import CustomerServices from "../services/customer.service.js";
 
 class CustomerController {
+  static async getAllOwnCustomers(req, res) {
+    const customers = await CustomerServices.getAllOwnCustomers(req.session.userId)
+    return res.status(200).send({ success: true, customers })
+  }
+
 	static async createCustomer(req, res) {
 		const customer = await CustomerServices.createCustomer(req.body);
 		return res.status(200).send({ success: true, customer });

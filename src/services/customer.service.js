@@ -37,6 +37,11 @@ class CustomerServices {
 		}
 	}
 
+  static async getAllOwnCustomers(employeeId) {
+    const customers = await CustomerModel.find({ employee: employeeId })
+    return customers
+  }
+
 	static async transferAllOwnerShips(originEmployeeId, destinationEmployeeId) {
 		await CustomerModel.updateMany(
 			{ employee: originEmployeeId },
@@ -89,7 +94,7 @@ class CustomerServices {
     Object.assign(product, productData)
     await customer.save()
 
-    return customer
+    return product
   }
 
   static async deleteProduct(productType, customerId, productId) {

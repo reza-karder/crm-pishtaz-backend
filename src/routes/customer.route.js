@@ -17,6 +17,12 @@ const router = Router();
 // =================================================
 // public routes
 // =================================================
+router.get(
+  "/customers/me",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.getAllOwnCustomers)
+)
+
 router.post(
 	"/customers",
 	requireAuthMiddleWare,
