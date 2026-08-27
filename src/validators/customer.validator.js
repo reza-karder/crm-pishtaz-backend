@@ -2,6 +2,7 @@ import Joi from "joi";
 
 const PHONE_REGEX = /^09\d{9}$/;
 const CALL_STATUS = ["scheduled", "done", "rejected"];
+const CUSTOMER_STATUS = ["active", "cold"]
 
 const potentialProductValidator = Joi.object({
 	product: Joi.string().required(),
@@ -32,6 +33,7 @@ const createCustomerValidator = Joi.object({
 	notes: Joi.string().optional(),
 	address: Joi.string().optional(),
 	job: Joi.string().optional(),
+  status: Joi.string().optional().valid(...CUSTOMER_STATUS),
 	potentialProducts: Joi.array().required().items(potentialProductValidator),
 	purchasedProducts: Joi.array().required().items(purchasedProductValidator),
 	calls: Joi.array().required().items(callValidator),
@@ -44,6 +46,7 @@ const updateCustomerValidator = Joi.object({
 	email: Joi.string().email(),
 	notes: Joi.string().optional(),
 	address: Joi.string().optional(),
+  status: Joi.string().optional().valid(...CUSTOMER_STATUS),
 	job: Joi.string().optional(),
 });
 

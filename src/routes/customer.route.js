@@ -59,6 +59,12 @@ router.delete(
 	catchAsync(CustomerController.deleteSingleCustomer)
 );
 
+router.delete(
+  "/customers",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.deleteManyCustomers)
+)
+
 router.post(
 	"/customers/:id/purchased-products",
 	requireAuthMiddleWare,
