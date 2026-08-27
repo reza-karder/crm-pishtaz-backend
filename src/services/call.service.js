@@ -1,6 +1,7 @@
 import { populate } from "dotenv";
 import CallModel from "../models/Call.model.js";
 import UserModel from "../models/User.model.js";
+import CustomerModel from "../models/Customer.model.js";
 
 class CallServices {
 	static async createMany(callsData) {
@@ -30,6 +31,12 @@ class CallServices {
 
   static async getSingleCall(callId) {
     const call = await CallModel.findById(callId).populate({ path: "customer" })
+    return call
+  }
+
+  static async createCall(callData) {
+    const call = await CallModel.create(callData)
+    await CustomerModel.findByIdAndUpdate(callData.customer, { $push: { calls: call._id } })
     return call
   }
 }

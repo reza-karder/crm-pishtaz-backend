@@ -15,6 +15,11 @@ class CallController {
     const call = await CallServices.getSingleCall(req.params.id)
     return res.status(200).send({ success: true, call })
   }
+
+  static async createCall(req, res) {
+    const call = await CallServices.createCall(req.body)
+    res.status(200).send({ success: true, call })
+  }
 }
 
 export default CallController
