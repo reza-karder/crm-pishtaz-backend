@@ -22,6 +22,11 @@ class CallServices {
 		const calls = employee.customers.map((customer) => customer.calls).flat();
 		return calls;
 	}
+
+  static async getAllCalls() {
+    const calls = await CallModel.find().populate({ path: "customer" })
+    return calls
+  }
 }
 
 export default CallServices;
