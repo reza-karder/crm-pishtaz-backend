@@ -7,6 +7,7 @@ import {
   addPotentialProductValidator,
 	addPurchasedProductValidator,
 	createCustomerValidator,
+	transferCustomerValidator,
 	updateCustomerValidator,
   updatePotentialProductValidator,
   updatePurchasedProductValidator,
@@ -103,6 +104,13 @@ router.delete(
   "/customers/:customerId/potential-products/:productId",
   requireAuthMiddleWare,
   catchAsync(CustomerController.deletePotentialProduct)
+)
+
+router.post(
+  "/customers/transfer",
+  requireAuthMiddleWare,
+  validateMiddleWare(transferCustomerValidator),
+  catchAsync(CustomerController.transferSingleCustomer)
 )
 
 export default router;

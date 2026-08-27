@@ -79,6 +79,12 @@ class CustomerController {
 		await CustomerServices.deleteProduct("potentialProducts", customerId, productId);
 		return res.status(200).send({ sucess: true });
 	}
+
+  static async transferSingleCustomer(req, res) {
+    const { destinationEmployeeId, customerId } = req.body
+    await CustomerServices.transferSingleCustomer(customerId, req.session.userId, destinationEmployeeId)
+    return res.status(200).send({ success: true })
+  }
 }
 
 export default CustomerController;

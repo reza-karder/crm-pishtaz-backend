@@ -53,7 +53,7 @@ class CustomerServices {
 		return customers;
 	}
 
-	static async transferAllOwnerShips(originEmployeeId, destinationEmployeeId) {
+	static async transferAllCustomers(originEmployeeId, destinationEmployeeId) {
 		await CustomerModel.updateMany(
 			{ employee: originEmployeeId },
 			{ employee: destinationEmployeeId }
@@ -64,6 +64,12 @@ class CustomerServices {
 			$push: { customers: originEmployee.customers },
 		});
 	}
+
+  static async transferSingleCustomer(customerId, originEmployeeId, destinationEmployeeId) {
+    await CustomerModel.findByIdAndUpdate(customerId, { employee: destinationEmployeeId })
+    await UserModel.findByIdAndUpdate(originEmployeeId, { $pull: { customers: customerId } })
+    await UserModel.findByIdAndUpdate(destinationEmployeeId, { $push: { customers: customerId } })
+  }
 
 	static async createCustomer(customerData) {
 		await this.checkDuplications(customerData);

@@ -54,12 +54,6 @@ class UserController {
 		const user = await UserServices.createUser(req.body);
 		return res.status(200).send({ success: true, user });
 	}
-
-	static async deleteUser(req, res) {
-		await CustomerServices.transferAllOwnerShips(req.params.id, req.body.substituteEmployeeId);
-		await UserServices.deleteUser(req.params.id);
-    res.status(200).send({ sucess: true, message: "کارمند با موفقیت حذف شد" })
-	}
 }
 
 export default UserController;

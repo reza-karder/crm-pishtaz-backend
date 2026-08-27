@@ -73,11 +73,17 @@ const updatePotentialProductValidator = Joi.object({
   intentionScore: Joi.number().valid(1, 2, 3, 4, 5),
 });
 
+const transferCustomerValidator = Joi.object({
+  customerId: Joi.string().required(),
+  destinationEmployeeId: Joi.string().required()
+})
+
 export {
 	createCustomerValidator,
 	updateCustomerValidator,
 	addPurchasedProductValidator,
 	addPotentialProductValidator,
 	updatePurchasedProductValidator,
-  updatePotentialProductValidator
+  updatePotentialProductValidator,
+  transferCustomerValidator
 };
