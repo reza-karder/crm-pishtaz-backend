@@ -8,6 +8,7 @@ const router = Router();
 // public routes
 // ======================================
 router.get("/calls/me", requireAuthMiddleWare, CallController.getAllOwnCalls);
+router.get("/calls/:id", requireAuthMiddleWare, CallController.getSingleCall)
 
 // ======================================
 // admin role routes

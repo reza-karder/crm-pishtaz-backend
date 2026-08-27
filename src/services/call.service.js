@@ -27,6 +27,11 @@ class CallServices {
     const calls = await CallModel.find().populate({ path: "customer" })
     return calls
   }
+
+  static async getSingleCall(callId) {
+    const call = await CallModel.findById(callId).populate({ path: "customer" })
+    return call
+  }
 }
 
 export default CallServices;
