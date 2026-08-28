@@ -39,6 +39,11 @@ class CallServices {
     await CustomerModel.findByIdAndUpdate(callData.customer, { $push: { calls: call._id } })
     return call
   }
+
+  static async updateCall(callId, callData) {
+    const call = await CallModel.findByIdAndUpdate(callId, callData, { returnDocument: "after" })
+    return call
+  }
 }
 
 export default CallServices;

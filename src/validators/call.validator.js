@@ -10,6 +10,15 @@ const createCallValidator = Joi.object({
   doneAt: Joi.date().optional(),
 })
 
+const updateCallValidator = Joi.object({
+  notes: Joi.string().optional(),
+  status: Joi.string().optional().valid(...CALL_STATUS),
+  customer: Joi.string().optional(),
+  scheduledAt: Joi.date().optional(),
+  doneAt: Joi.date().optional(),
+})
+
 export {
-  createCallValidator
+  createCallValidator,
+  updateCallValidator
 }

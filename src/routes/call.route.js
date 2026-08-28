@@ -2,20 +2,27 @@ import { Router } from "express";
 import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/auth.middleware.js";
 import CallController from "../controllers/call.controller.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { createCallValidator } from "../validators/call.validator.js";
+import { createCallValidator, updateCallValidator } from "../validators/call.validator.js";
+import { catchAsync } from "../utils/errorHandler.js";
 
 const router = Router();
 
 // ======================================
 // public routes
 // ======================================
-router.get("/calls/me", requireAuthMiddleWare, CallController.getAllOwnCalls);
-router.get("/calls/:id", requireAuthMiddleWare, CallController.getSingleCall);
+router.get("/calls/me", requireAuthMiddleWare, catchAsync(CallController.getAllOwnCalls));
+router.get("/calls/:id", requireAuthMiddleWare, catchAsync(CallController.getSingleCall));
 router.post(
 	"/calls",
 	requireAuthMiddleWare,
 	validateMiddleWare(createCallValidator),
-	CallController.createCall
+	catchAsync(CallController.createCall)
+);
+router.patch(
+	"/calls/:id",
+	requireAuthMiddleWare,
+	validateMiddleWare(updateCallValidator),
+	catchAsync(CallController.updateCall)
 );
 
 // ======================================
@@ -25,7 +32,7 @@ router.get(
 	"/calls",
 	requireAuthMiddleWare,
 	requireRoleMiddleWare("admin"),
-	CallController.getAllCalls
+	catchAsync(CallController.getAllCalls)
 );
 
 export default router;
