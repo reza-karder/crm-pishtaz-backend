@@ -23,8 +23,13 @@ class CallController {
 
   static async updateCall(req, res) {
     const call = await CallServices.updateCall(req.params.id, req.body)
+    return res.status(200).send({ success: true, call })
+  }
+
+  static async deleteCall(req, res) {
+    await CallServices.deleteCall(req.params.id)
     return res.status(200).send({ success: true })
   }
-}
+ }
 
 export default CallController

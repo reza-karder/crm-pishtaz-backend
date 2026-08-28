@@ -44,6 +44,11 @@ class CallServices {
     const call = await CallModel.findByIdAndUpdate(callId, callData, { returnDocument: "after" })
     return call
   }
+
+  static async deleteCall(callId) {
+    const call = await CallModel.findByIdAndDelete(callId)
+    await CustomerModel.findByIdAndUpdate(call.customer, { $pull: { calls: callId } })
+  }
 }
 
 export default CallServices;

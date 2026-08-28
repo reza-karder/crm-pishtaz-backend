@@ -24,6 +24,11 @@ router.patch(
 	validateMiddleWare(updateCallValidator),
 	catchAsync(CallController.updateCall)
 );
+router.delete(
+  "/calls/:id",
+  requireAuthMiddleWare,
+  catchAsync(CallController.deleteCall)
+)
 
 // ======================================
 // admin role routes
