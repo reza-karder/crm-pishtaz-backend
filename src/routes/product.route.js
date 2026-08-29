@@ -34,4 +34,11 @@ router.patch(
   catchAsync(ProductController.updateProduct)
 )
 
+router.delete(
+  "/products/:id",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  catchAsync(ProductController.deleteProduct)
+)
+
 export default router;

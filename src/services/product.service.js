@@ -17,6 +17,10 @@ class ProductServices {
 		});
     return product
 	}
+
+  static async deleteProduct(productId) {
+    await ProductModel.findByIdAndDelete(productId)
+  }
 }
 
 export default ProductServices;
