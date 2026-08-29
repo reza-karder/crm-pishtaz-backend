@@ -5,6 +5,11 @@ class JobServices {
     const jobs = await JobModel.find()
     return jobs
   }
+
+  static async createJob(jobData) {
+    const job = await JobModel.create(jobData)
+    return job
+  }
 }
 
 export default JobServices
