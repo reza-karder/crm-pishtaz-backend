@@ -33,4 +33,11 @@ router.patch(
 	catchAsync(JobController.updateJob)
 );
 
+router.delete(
+	"/jobs/:id",
+	requireAuthMiddleWare,
+	requireRoleMiddleWare("admin"),
+	catchAsync(JobController.deleteJob)
+);
+
 export default router;

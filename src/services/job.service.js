@@ -15,6 +15,10 @@ class JobServices {
 		const job = await JobModel.findByIdAndUpdate(jobId, jobData, { returnDocument: "after" });
 		return job;
 	}
+
+  static async deleteJob(jobId) {
+    await JobModel.findByIdAndDelete(jobId)
+  }
 }
 
 export default JobServices;
