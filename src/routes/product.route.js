@@ -3,7 +3,7 @@ import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/aut
 import ProductController from "../controllers/product.controller.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { createProductValidator } from "../validators/product.validator.js";
+import { createProductValidator, updateProductValidator } from "../validators/product.validator.js";
 
 const router = Router();
 
@@ -24,6 +24,14 @@ router.post(
   requireRoleMiddleWare("admin"),
   validateMiddleWare(createProductValidator),
   catchAsync(ProductController.createProduct)
+)
+
+router.patch(
+  "/products/:id",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  validateMiddleWare(updateProductValidator),
+  catchAsync(ProductController.updateProduct)
 )
 
 export default router;

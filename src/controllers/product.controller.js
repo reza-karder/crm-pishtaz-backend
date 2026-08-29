@@ -10,6 +10,11 @@ class ProductController {
     const product = await ProductServices.createProduct(req.body)
     return res.status(200).send({ success: true, product })
   }
+
+  static async updateProduct(req, res) {
+    const product = await ProductServices.updateProduct(req.params.id, req.body)
+    return res.status(200).send({ success: true, product })
+  }
 }
 
 export default ProductController
