@@ -4,4 +4,8 @@ const createJobValidator = Joi.object({
 	title: Joi.string().required(),
 });
 
-export { createJobValidator };
+const updateJobValidator = Joi.object({
+	title: Joi.string().optional(),
+});
+
+export { createJobValidator, updateJobValidator };
