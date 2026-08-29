@@ -5,6 +5,11 @@ class ProductServices {
     const products = await ProductModel.find()
     return products
   }
+
+  static async createProduct(productData) {
+    const product = await ProductModel.create(productData)
+    return product
+  }
 }
 
 export default ProductServices
