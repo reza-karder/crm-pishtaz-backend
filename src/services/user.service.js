@@ -25,6 +25,11 @@ class UserServices {
 		}
 	}
 
+  static async getUser(userId) {
+    const user = await UserModel.findById(userId)
+    return user
+  }
+
 	static async updateUser(userUpdates, userId) {
 		const user = await UserModel.findById(userId);
 
