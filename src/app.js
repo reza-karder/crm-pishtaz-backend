@@ -5,11 +5,16 @@ import session from 'express-session';
 import routes from "./routes/index.route.js";
 import env from "./config/env.js";
 import MongoStore from "connect-mongo"
+import cors from "cors"
 
 
 export default function createApp() {
   const app = express();
 
+  app.use(cors({
+    origin: env.clientOrigin,
+    credentials: true
+  }))
   app.use(helmet());
   app.use(express.json());
   app.use(cookieParser());
