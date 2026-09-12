@@ -2,6 +2,11 @@ import CustomerServices from "../services/customer.service.js";
 import UserServices from "../services/user.service.js";
 import { hashPassword } from "../utils/password.utils.js";
 class UserController {
+  static async getUser(req, res) {
+    const user = await UserServices.getUser(req.session.userId)
+    return res.status(200).send({ success: true, user })
+  }
+
 	static async updateOwn(req, res) {
 		if (req.body.password) {
 			delete req.body.password;

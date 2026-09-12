@@ -87,4 +87,11 @@ router.get(
   catchAsync(UserController.getAllActiveUsers)
 );
 
+router.get(
+  "/users/me/profile", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getUser)
+);
+
+
 export default router;
