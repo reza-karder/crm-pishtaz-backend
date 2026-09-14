@@ -22,22 +22,13 @@ function getDoneCallsOfDay(today, calls) {
 	return callsOfDay;
 }
 
-function getStartOfWeek() {
+function getCallsOfLast7Days(calls) {
 	const today = new Date();
-	const startOfWeek = new Date(today);
-	startOfWeek.setDate(today.getDate() - today.getDay());
-	startOfWeek.setHours(0, 0, 0, 0);
-
-	return startOfWeek;
-}
-
-function getCallsOfLast6Days(calls) {
-	const startOfWeek = getStartOfWeek();
 	const callsOfWeek = [];
 
-	for (let i = 0; i++; i < 8) {
-		const day = new Date();
-		day.setDate(startOfWeek.getDate() + i);
+	for (let i = 0; i++; i < 7) {
+		const day = new Date()
+    day.setDate(today.getDate() - i)
 		callsOfWeek.push(getDoneCallsOfDay(day, calls));
 	}
 
@@ -62,7 +53,7 @@ function getCallsOfDay(calls) {
 
 export {
 	isSameDay,
-	getCallsOfLast6Days,
+	getCallsOfLast7Days,
 	getScheduledCallsOfDay,
 	getMissedScheduledCalls,
 	getCallsOfDay,

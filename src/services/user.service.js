@@ -1,7 +1,7 @@
 import CallModel from "../models/Call.model.js";
 import UserModel from "../models/User.model.js";
 import ApiError from "../utils/ApiError.js";
-import { getCallsOfLast6Days, getScheduledCallsOfDay } from "../utils/date.utils.js";
+import { getCallsOfLast7Days, getScheduledCallsOfDay } from "../utils/date.utils.js";
 import { hashPassword, verifyPassword } from "../utils/password.utils.js";
 
 class UserServices {
@@ -78,7 +78,7 @@ class UserServices {
 		const stats = {
 			allCallsCount: calls.length,
 			customersCount: user.customers.length,
-			callsOfWeek: getCallsOfLast6Days(calls),
+			callsOfLast7Days: getCallsOfLast7Days(calls),
 			todayCalls: getScheduledCallsOfDay(new Date(), calls),
 		};
 

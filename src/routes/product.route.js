@@ -14,7 +14,6 @@ const router = Router();
 router.get(
 	"/products",
 	requireAuthMiddleWare,
-	requireRoleMiddleWare("admin"),
 	catchAsync(ProductController.getAllProducts)
 );
 
