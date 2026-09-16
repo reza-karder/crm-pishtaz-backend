@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import CallModel from "../models/Call.model.js";
 import UserModel from "../models/User.model.js";
 import ApiError from "../utils/ApiError.js";
@@ -25,15 +26,15 @@ class UserServices {
 		}
 	}
 
-  static async getUser(userId) {
-    const user = await UserModel.findById(userId)
-    return user
-  }
+	static async getUser(userId) {
+		const user = await UserModel.findById(userId);
+		return user;
+	}
 
 	static async updateUser(userUpdates, userId) {
 		const user = await UserModel.findById(userId);
 
-		await this.checkDuplications(userUpdates, userId)
+		await this.checkDuplications(userUpdates, userId);
 
 		const updatedUser = await UserModel.findByIdAndUpdate(userId, userUpdates, {
 			returnDocument: "after",
@@ -69,14 +70,14 @@ class UserServices {
 	}
 
 	static async getUserStats(userId) {
-		const user = await UserModel.findById(userId).populate({ path: "customers" });
-		const calls = await CallModel.find({ employee: userId }).populate({
-			path: "customer",
-			select: ["name"],
+		const user = await UserModel.findById(userId).populate({
+			path: "customers",
+			populate: { path: "calls", populate: { path: "customer" } },
 		});
+		const calls = user.customers.map((customer) => customer.calls).flat();
 
 		const stats = {
-			allCallsCount: calls.length,
+			allCallsCount: getScheduledCallsOfDay(new Date(), calls).length,
 			customersCount: user.customers.length,
 			callsOfLast7Days: getCallsOfLast7Days(calls),
 			todayCalls: getScheduledCallsOfDay(new Date(), calls),
@@ -86,15 +87,15 @@ class UserServices {
 	}
 
 	static async createUser(userData) {
-    await this.checkDuplications(userData)
-    userData.password = hashPassword(userData.password)
-    const user = await UserModel.create(userData)
-    return user
-  }
+		await this.checkDuplications(userData);
+		userData.password = hashPassword(userData.password);
+		const user = await UserModel.create(userData);
+		return user;
+	}
 
-  static async deleteUser(userId) {
-    await UserModel.findByIdAndDelete(userId)
-  }
+	static async deleteUser(userId) {
+		await UserModel.findByIdAndDelete(userId);
+	}
 }
 
 export default UserServices;
