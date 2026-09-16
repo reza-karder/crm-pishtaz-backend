@@ -7,8 +7,7 @@ const CallSchema = mongoose.Schema(
 		notes: { type: String },
 		status: { type: String, enum: STATUS, default: "scheduled" },
 		customer: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
-		scheduledAt: { type: Date },
-		doneAt: { type: Date },
+		date: { type: Date, required: true },
 	},
 	{ timestamps: true },
 );

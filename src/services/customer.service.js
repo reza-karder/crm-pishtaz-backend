@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CallModel from "../models/Call.model.js";
 import CustomerModel from "../models/Customer.model.js";
 import UserModel from "../models/User.model.js";
@@ -17,9 +18,11 @@ class CustomerServices {
 		const { phonePrimary, phoneSecondary, email } = customerData;
 
 		// check email unique
-		const isEmailDuplicated = await CustomerModel.exists({ email, _id: { $ne: exceptionId } });
-		if (isEmailDuplicated) {
-			throw ApiError.badRequest("این ایمیل از قبل وجود دارد");
+		if (email) {
+			const isEmailDuplicated = await CustomerModel.exists({ email, _id: { $ne: exceptionId } });
+			if (isEmailDuplicated) {
+				throw ApiError.badRequest("این ایمیل از قبل وجود دارد");
+			}
 		}
 
 		// check phonePrimary unique
@@ -29,12 +32,14 @@ class CustomerServices {
 		}
 
 		// check phoneSecondary unique
-		const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(
-			phoneSecondary,
-			exceptionId
-		);
-		if (isPhoneSecondaryDuplicated) {
-			throw ApiError.badRequest("شماره تماس دوم از قبل وجود دارد");
+		if (phoneSecondary) {
+			const isPhoneSecondaryDuplicated = await this.checkPhoneDuplication(
+				phoneSecondary,
+				exceptionId
+			);
+			if (isPhoneSecondaryDuplicated) {
+				throw ApiError.badRequest("شماره تماس دوم از قبل وجود دارد");
+			}
 		}
 	}
 
@@ -65,15 +70,17 @@ class CustomerServices {
 		});
 	}
 
-  static async transferSingleCustomer(customerId, originEmployeeId, destinationEmployeeId) {
-    await CustomerModel.findByIdAndUpdate(customerId, { employee: destinationEmployeeId })
-    await UserModel.findByIdAndUpdate(originEmployeeId, { $pull: { customers: customerId } })
-    await UserModel.findByIdAndUpdate(destinationEmployeeId, { $push: { customers: customerId } })
-  }
+	static async transferSingleCustomer(customerId, originEmployeeId, destinationEmployeeId) {
+		await CustomerModel.findByIdAndUpdate(customerId, { employee: destinationEmployeeId });
+		await UserModel.findByIdAndUpdate(originEmployeeId, { $pull: { customers: customerId } });
+		await UserModel.findByIdAndUpdate(destinationEmployeeId, { $push: { customers: customerId } });
+	}
 
-	static async createCustomer(customerData) {
+	static async createCustomer(employeeId, customerData) {
 		await this.checkDuplications(customerData);
+
 		const customer = new CustomerModel(customerData);
+		customer.employee = employeeId;
 
 		const callsWithCustomerId = customerData.calls.map((call) => ({
 			...call,
@@ -83,14 +90,37 @@ class CustomerServices {
 		customer.calls = calls;
 
 		await customer.save();
+
+		await UserModel.findByIdAndUpdate(employeeId, { $push: { customers: customer } });
+
 		return customer;
 	}
 
 	static async updateCustomer(customerId, customerData) {
+		console.log({ customerId, customerData });
 		await this.checkDuplications(customerData, customerId);
-		const customer = await CustomerModel.findByIdAndUpdate(customerId, customerData, {
-			returnDocument: "after",
+
+		const callIds = [];
+		const callOperations = customerData.calls.map((call) => {
+			call._id = call._id || new mongoose.Types.ObjectId();
+			callIds.push(call._id);
+
+			return {
+				updateOne: {
+					filter: { _id: call._id },
+					update: { $set: { ...call, customer: customerId } },
+					upsert: true,
+				},
+			};
 		});
+		const callsResult = await CallModel.bulkWrite(callOperations);
+
+		const customer = await CustomerModel.findByIdAndUpdate(
+			customerId,
+			{ ...customerData,  calls: callIds  },
+			{ returnDocument: "after" }
+		).populate({ path: "calls" });
+
 		return customer;
 	}
 
@@ -101,32 +131,6 @@ class CustomerServices {
 			{ customers: { $in: customerIds } },
 			{ $pull: { customers: { $in: customerIds } } }
 		);
-	}
-
-	/** @param {"purchasedProducts | potentialProducts"} productType */
-	static async addProduct(productData, productType, customerId) {
-		const product = await CustomerModel.findByIdAndUpdate(
-			customerId,
-			{ $push: { [productType]: productData } },
-			{ returnDocument: "after" }
-		);
-		return product;
-	}
-
-	static async updateProduct(productData, productType, customerId, productId) {
-		const customer = await CustomerModel.findById(customerId);
-		const product = customer[productType].id(productId);
-
-		Object.assign(product, productData);
-		await customer.save();
-
-		return product;
-	}
-
-	static async deleteProduct(productType, customerId, productId) {
-		await CustomerModel.findByIdAndUpdate(customerId, {
-			$pull: { [productType]: { _id: productId } },
-		});
 	}
 }
 

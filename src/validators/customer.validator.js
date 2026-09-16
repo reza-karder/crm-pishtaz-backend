@@ -1,76 +1,50 @@
 import Joi from "joi";
 
 const PHONE_REGEX = /^09\d{9}$/;
-const CALL_STATUS = ["scheduled", "done", "rejected"];
+const CALL_STATUS = ["scheduled", "done", "rejected", "unanswered"];
 const CUSTOMER_STATUS = ["active", "cold"]
 
-const potentialProductValidator = Joi.object({
-	product: Joi.string().required(),
-	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).required(),
-});
-
-const purchasedProductValidator = Joi.object({
-	product: Joi.string().required(),
-	price: Joi.number().optional(),
-  count: Joi.number().min(1),
-	date: Joi.date().optional(),
-});
-
 const callValidator = Joi.object({
-	notes: Joi.string().optional(),
+	notes: Joi.string().optional().allow(""),
 	status: Joi.string()
 		.valid(...CALL_STATUS)
 		.required(),
-	scheduledAt: Joi.date().optional(),
-	doneAt: Joi.date().optional(),
+	date: Joi.date().required(),
+  _id: Joi.string().optional()
 });
+
+const productValidator = Joi.object({
+  type: Joi.string().required().valid("purchased", "potential"),
+  price: Joi.number().optional().allow(""),
+  intentionScore: Joi.number().valid(1,2,3,4,5),
+  quantity: Joi.number().integer(),
+  _id: Joi.string().optional()
+})
 
 const createCustomerValidator = Joi.object({
 	name: Joi.string().required(),
 	phonePrimary: Joi.string().required().regex(PHONE_REGEX),
-	phoneSecondary: Joi.string().optional().regex(PHONE_REGEX),
-	email: Joi.string().required().email(),
-	notes: Joi.string().optional(),
-	address: Joi.string().optional(),
+	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX),
+	email: Joi.string().required().allow("").email(),
+	notes: Joi.string().optional().allow(""),
+	address: Joi.string().optional().allow(""),
 	job: Joi.string().optional(),
   status: Joi.string().optional().valid(...CUSTOMER_STATUS),
-	potentialProducts: Joi.array().required().items(potentialProductValidator),
-	purchasedProducts: Joi.array().required().items(purchasedProductValidator),
 	calls: Joi.array().required().items(callValidator),
+  products: Joi.array().required().items(productValidator)
 });
 
 const updateCustomerValidator = Joi.object({
-	name: Joi.string(),
-	phonePrimary: Joi.string().regex(PHONE_REGEX),
-	phoneSecondary: Joi.string().optional().regex(PHONE_REGEX),
-	email: Joi.string().email(),
-	notes: Joi.string().optional(),
-	address: Joi.string().optional(),
-  status: Joi.string().optional().valid(...CUSTOMER_STATUS),
+	name: Joi.string().optional(),
+	phonePrimary: Joi.string().optional().regex(PHONE_REGEX),
+	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX),
+	email: Joi.string().optional().allow("").email(),
+	notes: Joi.string().optional().allow(""),
+	address: Joi.string().optional().allow(""),
 	job: Joi.string().optional(),
-});
-
-const addPurchasedProductValidator = Joi.object({
-	product: Joi.string().required(),
-	price: Joi.number().optional(),
-  count: Joi.number().min(1),
-	date: Joi.date().optional(),
-});
-
-const addPotentialProductValidator = Joi.object({
-	product: Joi.string().required(),
-	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).required(),
-});
-
-const updatePurchasedProductValidator = Joi.object({
-  product: Joi.string().optional(),
-  count: Joi.number().min(1),
-	intentionScore: Joi.number().valid(1, 2, 3, 4, 5).optional(),
-});
-
-const updatePotentialProductValidator = Joi.object({
-  product: Joi.string(),
-  intentionScore: Joi.number().valid(1, 2, 3, 4, 5),
+  status: Joi.string().optional().valid(...CUSTOMER_STATUS),
+	calls: Joi.array().optional().items(callValidator),
+  products: Joi.array().optional().items(productValidator)
 });
 
 const transferCustomerValidator = Joi.object({
@@ -81,9 +55,5 @@ const transferCustomerValidator = Joi.object({
 export {
 	createCustomerValidator,
 	updateCustomerValidator,
-	addPurchasedProductValidator,
-	addPotentialProductValidator,
-	updatePurchasedProductValidator,
-  updatePotentialProductValidator,
   transferCustomerValidator
 };

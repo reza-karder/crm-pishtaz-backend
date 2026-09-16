@@ -4,13 +4,9 @@ import validateMiddleWare from "../middlewares/validate.middleware.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import CustomerController from "../controllers/customer.controller.js";
 import {
-  addPotentialProductValidator,
-	addPurchasedProductValidator,
 	createCustomerValidator,
 	transferCustomerValidator,
 	updateCustomerValidator,
-  updatePotentialProductValidator,
-  updatePurchasedProductValidator,
 } from "../validators/customer.validator.js";
 
 const router = Router();
@@ -64,46 +60,6 @@ router.delete(
   "/customers",
   requireAuthMiddleWare,
   catchAsync(CustomerController.deleteManyCustomers)
-)
-
-router.post(
-	"/customers/:id/purchased-products",
-	requireAuthMiddleWare,
-	validateMiddleWare(addPurchasedProductValidator),
-	catchAsync(CustomerController.addPurchasedProduct)
-);
-
-router.post(
-	"/customers/:id/potential-products",
-	requireAuthMiddleWare,
-	validateMiddleWare(addPotentialProductValidator),
-	catchAsync(CustomerController.addPotentialProduct)
-);
-
-router.patch(
-  "/customers/:customerId/purchased-products/:productId",
-  requireAuthMiddleWare,
-  validateMiddleWare(updatePurchasedProductValidator),
-  catchAsync(CustomerController.updatePurchasedProduct)
-)
-
-router.patch(
-  "/customers/:customerId/potential-products/:productId",
-  requireAuthMiddleWare,
-  validateMiddleWare(updatePotentialProductValidator),
-  catchAsync(CustomerController.updatePotentialProduct)
-)
-
-router.delete(
-  "/customers/:customerId/purchased-products/:productId",
-  requireAuthMiddleWare,
-  catchAsync(CustomerController.deletePurchasedProduct)
-)
-
-router.delete(
-  "/customers/:customerId/potential-products/:productId",
-  requireAuthMiddleWare,
-  catchAsync(CustomerController.deletePotentialProduct)
 )
 
 router.post(

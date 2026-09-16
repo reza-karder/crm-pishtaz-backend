@@ -13,7 +13,6 @@ const router = Router();
 router.get(
 	"/jobs",
 	requireAuthMiddleWare,
-	requireRoleMiddleWare("admin"),
 	catchAsync(JobController.getAllJobs)
 );
 

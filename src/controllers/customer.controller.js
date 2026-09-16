@@ -17,7 +17,7 @@ class CustomerController {
   }
 
 	static async createCustomer(req, res) {
-		const customer = await CustomerServices.createCustomer(req.body);
+		const customer = await CustomerServices.createCustomer(req.session.userId, req.body);
 		return res.status(200).send({ success: true, customer });
 	}
 
@@ -35,50 +35,6 @@ class CustomerController {
     await CustomerServices.deleteManyCustomers(req.body.customerIds)
     return res.status(200).send({ success: true })
   }
-
-	static async addPurchasedProduct(req, res) {
-		const product = await CustomerServices.addProduct(req.body, "purchasedProducts", req.params.id);
-		return res.status(200).send({ sucess: true, product });
-	}
-
-	static async addPotentialProduct(req, res) {
-		const product = await CustomerServices.addProduct(req.body, "potentialProducts", req.params.id);
-		return res.status(200).send({ sucess: true, product });
-	}
-
-	static async updatePurchasedProduct(req, res) {
-		const { customerId, productId } = req.params;
-		const product = await CustomerServices.updateProduct(
-			req.body,
-			"purchasedProducts",
-			customerId,
-			productId
-		);
-		return res.status(200).send({ sucess: true, product });
-	}
-
-	static async updatePotentialProduct(req, res) {
-		const { customerId, productId } = req.params;
-		const product = await CustomerServices.updateProduct(
-			req.body,
-			"potentialProducts",
-			customerId,
-			productId
-		);
-		return res.status(200).send({ sucess: true, product });
-	}
-
-	static async deletePurchasedProduct(req, res) {
-		const { customerId, productId } = req.params;
-		await CustomerServices.deleteProduct("purchasedProducts", customerId, productId);
-		return res.status(200).send({ sucess: true });
-	}
-
-	static async deletePotentialProduct(req, res) {
-		const { customerId, productId } = req.params;
-		await CustomerServices.deleteProduct("potentialProducts", customerId, productId);
-		return res.status(200).send({ sucess: true });
-	}
 
   static async transferSingleCustomer(req, res) {
     const { destinationEmployeeId, customerId } = req.body
