@@ -5,6 +5,7 @@ import { catchAsync } from "../utils/errorHandler.js";
 import CustomerController from "../controllers/customer.controller.js";
 import {
 	createCustomerValidator,
+	customerQueryParamsValidator,
 	transferCustomerValidator,
 	updateCustomerValidator,
 } from "../validators/customer.validator.js";
@@ -27,6 +28,7 @@ router.get(
 router.get(
   "/customers/me",
   requireAuthMiddleWare,
+  validateMiddleWare(customerQueryParamsValidator, "query"),
   catchAsync(CustomerController.getAllOwnCustomers)
 )
 

@@ -7,8 +7,8 @@ class CustomerController {
   }
 
   static async getAllOwnCustomers(req, res) {
-    const customers = await CustomerServices.getAllOwnCustomers(req.session.userId)
-    return res.status(200).send({ success: true, customers })
+    const results = await CustomerServices.getAllOwnCustomers(req.session.userId, req.query)
+    return res.status(200).send({ success: true, ...results })
   }
 
   static async getSingleCustomer(req, res) {

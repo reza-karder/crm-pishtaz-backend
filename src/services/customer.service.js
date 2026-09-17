@@ -4,6 +4,12 @@ import CustomerModel from "../models/Customer.model.js";
 import UserModel from "../models/User.model.js";
 import ApiError from "../utils/ApiError.js";
 import CallServices from "./call.service.js";
+import {
+	createCallOption,
+	createFilterOptions,
+	createSortOption,
+	removeDefaultFields,
+} from "../utils/customer.utils.js";
 
 class CustomerServices {
 	static async checkPhoneDuplication(phone, exceptionId) {
@@ -48,9 +54,36 @@ class CustomerServices {
 		return customers;
 	}
 
-	static async getAllOwnCustomers(employeeId) {
-		const customers = await CustomerModel.find({ employee: employeeId });
-		return customers;
+	static async getAllOwnCustomers(employeeId, queries) {
+		// create filter options
+		const cleanedQueries = removeDefaultFields(queries);
+		const filterOptions = createFilterOptions(cleanedQueries);
+		const sortOption = createSortOption(cleanedQueries.sort);
+
+		// handle page filter
+		const page = Number(cleanedQueries.page) || 1;
+		const limit = 15;
+		const skip = (page - 1) * limit;
+
+		// handle call filter
+		let customerWithCallsIds = [];
+		if (cleanedQueries.call) {
+			customerWithCallsIds = await CallModel.distinct("customer", { status: "scheduled" });
+		}
+		const callOption = createCallOption(cleanedQueries.call, customerWithCallsIds);
+
+		// get data with filters
+		const findOptions = { employee: employeeId, ...filterOptions, ...callOption };
+		const [customers, totalCustomers] = await Promise.all([
+			CustomerModel.find(findOptions)
+				.sort(sortOption)
+				.skip(skip)
+				.limit(limit)
+				.populate({ path: "job" }),
+			CustomerModel.countDocuments(findOptions),
+		]);
+
+		return { customers, totalPages: Math.ceil(totalCustomers / limit), totalCustomers, limit };
 	}
 
 	static async getSingleCustomer(customerId) {
@@ -117,7 +150,7 @@ class CustomerServices {
 
 		const customer = await CustomerModel.findByIdAndUpdate(
 			customerId,
-			{ ...customerData,  calls: callIds  },
+			{ ...customerData, calls: callIds },
 			{ returnDocument: "after" }
 		).populate({ path: "calls" });
 
