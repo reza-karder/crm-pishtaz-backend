@@ -83,9 +83,17 @@ const customerQueryParamsValidator = Joi.object({
 	page: Joi.string().optional(),
 });
 
+const deleteManyCustomersValidator = Joi.object({
+  mode: Joi.string().required().valid("all", "explicit"),
+  excludedIds: Joi.array().optional(),
+  selectedIds: Joi.array().optional()
+})
+
 export {
 	createCustomerValidator,
 	updateCustomerValidator,
 	transferCustomerValidator,
 	customerQueryParamsValidator,
+  deleteManyCustomersValidator
+
 };

@@ -6,6 +6,7 @@ import CustomerController from "../controllers/customer.controller.js";
 import {
 	createCustomerValidator,
 	customerQueryParamsValidator,
+	deleteManyCustomersValidator,
 	transferCustomerValidator,
 	updateCustomerValidator,
 } from "../validators/customer.validator.js";
@@ -58,9 +59,10 @@ router.delete(
 	catchAsync(CustomerController.deleteSingleCustomer)
 );
 
-router.delete(
-  "/customers",
+router.post(
+  "/customers/delete-many",
   requireAuthMiddleWare,
+  validateMiddleWare(deleteManyCustomersValidator),
   catchAsync(CustomerController.deleteManyCustomers)
 )
 

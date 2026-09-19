@@ -157,12 +157,25 @@ class CustomerServices {
 		return customer;
 	}
 
-	static async deleteManyCustomers(customerIds) {
-		await CustomerModel.deleteMany({ _id: { $in: customerIds } });
-		await CallModel.deleteMany({ customerId: { $in: customerIds } });
+	static async deleteManyCustomers(employeeId, selection) {
+		let customerIdsToDelete = [];
+
+		if (selection.mode === "all") {
+			const allCustomerIds = await CustomerModel.find({ employee: employeeId }).distinct("_id");
+			customerIdsToDelete = allCustomerIds.filter(
+				(customerId) => !selection.excludedIds.includes(String(customerId))
+			);
+		}
+
+		if (selection.mode === "explicit") {
+			customerIdsToDelete = selection.selectedIds;
+		}
+
+		await CustomerModel.deleteMany({ _id: { $in: customerIdsToDelete } });
+		await CallModel.deleteMany({ customerId: { $in: customerIdsToDelete } });
 		await UserModel.updateMany(
-			{ customers: { $in: customerIds } },
-			{ $pull: { customers: { $in: customerIds } } }
+			{ customers: { $in: customerIdsToDelete } },
+			{ $pull: { customers: { $in: customerIdsToDelete } } }
 		);
 	}
 }
