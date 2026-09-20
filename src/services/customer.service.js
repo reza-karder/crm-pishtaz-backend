@@ -10,6 +10,7 @@ import {
 	createSortOption,
 	removeDefaultFields,
 } from "../utils/customer.utils.js";
+import ProductModel from "../models/Product.model.js";
 
 class CustomerServices {
 	static async checkPhoneDuplication(phone, exceptionId) {
@@ -29,6 +30,10 @@ class CustomerServices {
 			if (isEmailDuplicated) {
 				throw ApiError.badRequest("این ایمیل از قبل وجود دارد");
 			}
+		}
+
+		if (phonePrimary === phoneSecondary) {
+			throw ApiError.badRequest("شماره تماس اصلی نمی تواند با شماره تماس دوم برابر باشد");
 		}
 
 		// check phonePrimary unique
@@ -87,7 +92,10 @@ class CustomerServices {
 	}
 
 	static async getSingleCustomer(customerId) {
-		const customers = await CustomerModel.findById(customerId).populate({ path: "calls" });
+		const customers = await CustomerModel.findById(customerId)
+			.populate({ path: "calls" })
+			.populate({ path: "job" })
+			.populate({ path: "products.product" });
 		return customers;
 	}
 
@@ -130,7 +138,6 @@ class CustomerServices {
 	}
 
 	static async updateCustomer(customerId, customerData) {
-		console.log({ customerId, customerData });
 		await this.checkDuplications(customerData, customerId);
 
 		const callIds = [];
@@ -152,7 +159,10 @@ class CustomerServices {
 			customerId,
 			{ ...customerData, calls: callIds },
 			{ returnDocument: "after" }
-		).populate({ path: "calls" });
+		)
+			.populate({ path: "calls" })
+			.populate({ path: "job" })
+			.populate({ path: "products.product" });
 
 		return customer;
 	}
@@ -172,12 +182,21 @@ class CustomerServices {
 		}
 
 		await CustomerModel.deleteMany({ _id: { $in: customerIdsToDelete } });
-		await CallModel.deleteMany({ customerId: { $in: customerIdsToDelete } });
+		await CallModel.deleteMany({ customer: { $in: customerIdsToDelete } });
 		await UserModel.updateMany(
 			{ customers: { $in: customerIdsToDelete } },
 			{ $pull: { customers: { $in: customerIdsToDelete } } }
 		);
 	}
+
+  static async deleteSingleCustomer(customerId) {
+    await CustomerModel.findByIdAndDelete(customerId);
+		await CallModel.deleteMany({ customer: customerId });
+		await UserModel.updateMany(
+			{ customers: customerId },
+			{ $pull: { customers: customerId } }
+		);
+  }
 }
 
 export default CustomerServices;

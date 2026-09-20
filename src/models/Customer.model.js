@@ -6,7 +6,7 @@ const PRODUCT_TYPES = ["purchased", "potential"];
 
 const ProductSchema = mongoose.Schema(
 	{
-		product: { type: mongoose.Types.ObjectId, ref: "product", required: true },
+		product: { type: mongoose.Types.ObjectId, ref: "Product", required: true },
 		type: { type: String, enum: PRODUCT_TYPES, required: true },
 		intentionScore: { type: Number, enum: INTENTION_SCORES },
 		price: { type: Number },

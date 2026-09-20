@@ -5,8 +5,8 @@ const DATE_OPTION_DAYS = {
 };
 
 const SORT_OPTION_MAPS = {
-	newest: { createdAt: 1 },
-	oldest: { createdAt: -1 },
+	newest: { createdAt: -1 },
+	oldest: { createdAt: 1 },
 	name: { name: 1 },
 };
 

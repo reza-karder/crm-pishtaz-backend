@@ -8,6 +8,22 @@ import { catchAsync } from "../utils/errorHandler.js";
 const router = Router();
 
 // ===========================================
+// public routes
+// ===========================================
+router.get(
+  "/users/active", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getAllActiveUsers)
+);
+
+router.get(
+  "/users/me/profile", 
+  requireAuthMiddleWare, 
+  catchAsync(UserController.getUser)
+);
+
+
+// ===========================================
 // employee role routes
 // ===========================================
 router.patch(
@@ -77,21 +93,5 @@ router.delete(
   validateMiddleWare(deleteUserValidator),
   catchAsync(UserController.deleteUser)
 )
-
-// ===========================================
-// public routes
-// ===========================================
-router.get(
-  "/users/active", 
-  requireAuthMiddleWare, 
-  catchAsync(UserController.getAllActiveUsers)
-);
-
-router.get(
-  "/users/me/profile", 
-  requireAuthMiddleWare, 
-  catchAsync(UserController.getUser)
-);
-
 
 export default router;

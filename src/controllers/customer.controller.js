@@ -27,8 +27,8 @@ class CustomerController {
 	}
 
   static async deleteSingleCustomer(req, res) {
-    await CustomerServices.deleteManyCustomers([req.params.id])
-    return res.status(200).send({ success: true })
+    await CustomerServices.deleteSingleCustomer(req.params.id)
+    return res.status(200).send({ success: true,  message: "مشتری با موفقیت حذف شدند" })
   }
 
   static async deleteManyCustomers(req, res) {
