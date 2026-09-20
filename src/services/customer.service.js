@@ -197,6 +197,14 @@ class CustomerServices {
 			{ $pull: { customers: customerId } }
 		);
   }
+
+  static async toggleCustomerStatus(customerId) {
+    const customer = await CustomerModel.findById(customerId)
+    customer.status = customer.status === "active" ? "cold" : "active"
+    await customer.save()
+    
+    return customer.status
+  } 
 }
 
 export default CustomerServices;

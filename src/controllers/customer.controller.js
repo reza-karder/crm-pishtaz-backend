@@ -41,6 +41,12 @@ class CustomerController {
     await CustomerServices.transferSingleCustomer(customerId, req.session.userId, destinationEmployeeId)
     return res.status(200).send({ success: true })
   }
+
+  static async toggleCustomerStatus(req, res) {
+    console.log(req.params);
+    const status = await CustomerServices.toggleCustomerStatus(req.params.id)
+    return res.status(200).send({ success: true, status })
+  }
 }
 
 export default CustomerController;

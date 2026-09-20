@@ -40,6 +40,12 @@ router.get(
 )
 
 router.post(
+  "/customers/:id/status",
+  requireAuthMiddleWare,
+  catchAsync(CustomerController.toggleCustomerStatus)
+)
+
+router.post(
 	"/customers",
 	requireAuthMiddleWare,
 	validateMiddleWare(createCustomerValidator),
