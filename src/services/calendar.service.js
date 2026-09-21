@@ -13,9 +13,16 @@ class CalendarService {
 			status: "scheduled",
 			date: { $gte: normalizeStartDate(startDate), $lte: normalizeEndDate(endDate) },
 		});
-    console.log({calls});
 
 		return sortCallsByDay(calls, startDate, endDate);
+	}
+
+	static async getCallsOfDay(employeeId, date) {
+		const calls = await CallModel.find({
+			employee: employeeId,
+			date: { $gte: normalizeStartDate(date), $lte: normalizeEndDate(date) },
+		}).populate({ path: "customer", select: ["name", "_id"] });
+    return calls
 	}
 }
 

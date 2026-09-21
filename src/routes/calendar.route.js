@@ -11,4 +11,10 @@ router.get(
 	catchAsync(CalendarController.getCallsInRange)
 );
 
+router.get(
+  "/calendar/:date",
+  requireAuthMiddleWare,
+  catchAsync(CalendarController.getCallsOfDay)
+)
+
 export default router;
