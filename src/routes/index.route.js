@@ -6,6 +6,7 @@ import CallRouter from "./call.route.js";
 import NotificationRouter from "./notification.route.js";
 import ProductRouter from "./product.route.js";
 import JobRouter from "./job.route.js";
+import CalendarRouter from "./calendar.route.js"
 
 const router = Router();
 
@@ -16,7 +17,8 @@ router.use(
 	CallRouter,
 	NotificationRouter,
 	ProductRouter,
-	JobRouter
+	JobRouter,
+  CalendarRouter
 );
 
 export default router;
