@@ -67,12 +67,12 @@ function createFilterOptions(queries) {
 	}
 
 	if (search) {
-		options.$or.push(
+		options.$or = [
 			{ name: { $regex: search, $options: "i" } },
 			{ email: { $regex: search, $options: "i" } },
 			{ phonePrimary: { $regex: search, $options: "i" } },
 			{ phoneSecondary: { $regex: search, $options: "i" } }
-		);
+    ];
 	}
 
 	return options;
