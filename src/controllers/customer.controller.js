@@ -43,7 +43,6 @@ class CustomerController {
   }
 
   static async toggleCustomerStatus(req, res) {
-    console.log(req.params);
     const status = await CustomerServices.toggleCustomerStatus(req.params.id)
     return res.status(200).send({ success: true, status })
   }

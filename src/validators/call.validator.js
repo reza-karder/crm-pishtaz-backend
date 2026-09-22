@@ -11,11 +11,10 @@ const createCallValidator = Joi.object({
 })
 
 const updateCallValidator = Joi.object({
-  notes: Joi.string().optional(),
+  notes: Joi.string().optional().allow(""),
   status: Joi.string().optional().valid(...CALL_STATUS),
   customer: Joi.string().optional(),
-  scheduledAt: Joi.date().optional(),
-  doneAt: Joi.date().optional(),
+  date: Joi.string().optional(),
 })
 
 export {
