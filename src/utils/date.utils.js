@@ -11,14 +11,14 @@ function getScheduledCallsOfDay(today, calls) {
 }
 
 function getDoneCallsOfDay(today, calls) {
-	return calls.filter((call) => isSameDay(call.date, today) && call.status === "done");;
+	return calls.filter((call) => isSameDay(call.date, today) && call.status === "done");
 }
 
 function getCallsOfLast7Days(calls) {
 	const today = new Date();
 	const callsOfWeek = [];
 
-	for (let i = 0 ; i < 7; i++) {
+	for (let i = 0; i < 7; i++) {
 		const day = new Date();
 		day.setDate(today.getDate() - i);
 		callsOfWeek.push(getDoneCallsOfDay(day, calls));
@@ -27,14 +27,14 @@ function getCallsOfLast7Days(calls) {
 	return callsOfWeek;
 }
 
-function getMissedScheduledCalls(calls) {
+function getUnresolvedCalls(calls) {
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 
-	const missedCalls = calls.filter(
-		(call) => call.date < today && call.status === "scheduled"
+	const unresolvedCalls = calls.filter(
+		(call) => new Date(call.date) < today && call.status === "scheduled"
 	);
-	return missedCalls;
+	return unresolvedCalls;
 }
 
 function getCallsOfDay(calls) {
@@ -47,6 +47,7 @@ export {
 	isSameDay,
 	getCallsOfLast7Days,
 	getScheduledCallsOfDay,
-	getMissedScheduledCalls,
+	getUnresolvedCalls,
 	getCallsOfDay,
+  getDoneCallsOfDay
 };
