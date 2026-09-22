@@ -52,7 +52,7 @@ router.post(
 	catchAsync(CustomerController.createCustomer)
 );
 
-router.patch(
+router.put(
 	"/customers/:id",
 	requireAuthMiddleWare,
 	validateMiddleWare(updateCustomerValidator),
