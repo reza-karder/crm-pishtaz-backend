@@ -4,6 +4,11 @@ import UserModel from "../models/User.model.js";
 import CustomerModel from "../models/Customer.model.js";
 
 class CallServices {
+	static async createMany(callsData) {
+		const calls = await CallModel.insertMany(callsData);
+		return calls;
+	}
+
 	static async getAllOwnCalls(employeeId) {
 		const calls = await CallModel.find({ employee: employeeId }).populate({ path: "customer" });
 		return calls;

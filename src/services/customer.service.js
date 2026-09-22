@@ -139,8 +139,11 @@ class CustomerServices {
 
 	static async updateCustomer(customerId, customerData) {
 		await this.checkDuplications(customerData, customerId);
+    const customer = await CustomerModel.findById(customerId)
 
 		const callIds = [];
+
+    // update calls
 		const callOperations = customerData.calls.map((call) => {
 			call._id = call._id || new mongoose.Types.ObjectId();
 			callIds.push(call._id);
@@ -153,9 +156,21 @@ class CustomerServices {
 				},
 			};
 		});
+
+    // delete calls
+    customer.calls.forEach(callId => {
+      if(!callIds.includes(callId.toString())) {
+        callOperations.push({
+          deleteOne: {
+            filter: { _id: callId }
+          }
+        })
+      }
+    })
+
 		const callsResult = await CallModel.bulkWrite(callOperations);
 
-		const customer = await CustomerModel.findByIdAndUpdate(
+		const updatedCustomer = await CustomerModel.findByIdAndUpdate(
 			customerId,
 			{ ...customerData, calls: callIds },
 			{ returnDocument: "after" }
@@ -164,7 +179,7 @@ class CustomerServices {
 			.populate({ path: "job" })
 			.populate({ path: "products.product" });
 
-		return customer;
+		return updatedCustomer;
 	}
 
 	static async deleteManyCustomers(employeeId, selection) {

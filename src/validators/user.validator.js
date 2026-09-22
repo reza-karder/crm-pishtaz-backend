@@ -13,7 +13,7 @@ const createUserValidator = Joi.object({
 const updateUserValidator = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().optional().email(),
-  phone: Joi.string().optional().regex(/^09\d{9}$/),
+  phone: Joi.string().optional().regex(/^09\d{9}$/).allow(""),
   password: Joi.string().optional().regex(PASSWORD_REGEX),
 })
 
