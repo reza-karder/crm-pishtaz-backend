@@ -4,6 +4,7 @@ import UserModel from "../models/User.model.js";
 import ApiError from "../utils/ApiError.js";
 import { getCallsOfLast7Days, getScheduledCallsOfDay } from "../utils/date.utils.js";
 import { hashPassword, verifyPassword } from "../utils/password.utils.js";
+import CallServices from "./call.service.js";
 
 class UserServices {
 	static async checkDuplications(userData, exceptionId) {
@@ -70,11 +71,8 @@ class UserServices {
 	}
 
 	static async getUserStats(userId) {
-		const user = await UserModel.findById(userId).populate({
-			path: "customers",
-			populate: { path: "calls", populate: { path: "customer" } },
-		});
-		const calls = user.customers.map((customer) => customer.calls).flat();
+    const user = await UserServices.getUser(userId)
+		const calls = await CallServices.getAllOwnCalls(userId);
 
 		const stats = {
 			allCallsCount: getScheduledCallsOfDay(new Date(), calls).length,

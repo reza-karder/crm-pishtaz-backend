@@ -9,8 +9,12 @@ class CallServices {
 		return calls;
 	}
 
-	static async getAllOwnCalls(employeeId) {
-		const calls = await CallModel.find({ employee: employeeId }).populate({ path: "customer" });
+	static async getAllOwnCalls(employeeId, options = {}) {
+		const user = await UserModel.findById(employeeId);
+		const calls = await CallModel.find({ customer: { $in: user.customers }, ...options }).populate({
+			path: "customer",
+		});
+
 		return calls;
 	}
 

@@ -5,11 +5,11 @@ import {
 	normalizeStartDate,
 	sortCallsByDay,
 } from "../utils/calendar.utils.js";
+import CallServices from "./call.service.js";
 
 class CalendarService {
 	static async getCallsInRange(employeeId, startDate, endDate) {
-		const calls = await CallModel.find({
-			employee: employeeId,
+		const calls = await CallServices.getAllOwnCalls(employeeId, {
 			status: "scheduled",
 			date: { $gte: normalizeStartDate(startDate), $lte: normalizeEndDate(endDate) },
 		});
@@ -18,11 +18,11 @@ class CalendarService {
 	}
 
 	static async getCallsOfDay(employeeId, date) {
-		const calls = await CallModel.find({
-			employee: employeeId,
+		const calls = await CallServices.getAllOwnCalls(employeeId, {
 			date: { $gte: normalizeStartDate(date), $lte: normalizeEndDate(date) },
-		}).populate({ path: "customer", select: ["name", "_id"] });
-    return calls
+		});
+
+		return calls;
 	}
 }
 
