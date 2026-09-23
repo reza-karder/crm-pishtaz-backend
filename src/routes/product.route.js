@@ -7,15 +7,22 @@ import { createProductValidator, updateProductValidator } from "../validators/pr
 
 const router = Router();
 
-// =========================================
-// admin role routes
-// =========================================
 
 router.get(
-	"/products",
+	"/products/all",
 	requireAuthMiddleWare,
 	catchAsync(ProductController.getAllProducts)
 );
+
+// =========================================
+// admin role routes
+// =========================================
+router.get(
+  "/products",
+  requireAuthMiddleWare,
+  requireRoleMiddleWare("admin"),
+  catchAsync(ProductController.getAdminProducts)
+)
 
 router.post(
   "/products",

@@ -6,6 +6,11 @@ class ProductController {
     res.status(200).send({ success: true, products })
   } 
 
+  static async getAdminProducts(req, res) {
+    const result = await ProductServices.getAdminProducts(req.query)
+    res.status(200).send({ succes: true, ...result })
+  }
+
   static async createProduct(req, res) {
     const product = await ProductServices.createProduct(req.body)
     return res.status(200).send({ success: true, product })
