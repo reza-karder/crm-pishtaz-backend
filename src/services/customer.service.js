@@ -91,8 +91,8 @@ class CustomerServices {
 		return { customers, totalPages: Math.ceil(totalCustomers / limit), totalCustomers, limit };
 	}
 
-	static async getSingleCustomer(customerId) {
-		const customers = await CustomerModel.findById(customerId)
+	static async getSingleCustomer(employeeId, customerId) {
+		const customers = await CustomerModel.findOne({ _id: customerId, employee: employeeId })
 			.populate({ path: "calls" })
 			.populate({ path: "job" })
 			.populate({ path: "products.product" });
@@ -139,11 +139,11 @@ class CustomerServices {
 
 	static async updateCustomer(customerId, customerData) {
 		await this.checkDuplications(customerData, customerId);
-    const customer = await CustomerModel.findById(customerId)
+		const customer = await CustomerModel.findById(customerId);
 
 		const callIds = [];
 
-    // update calls
+		// update calls
 		const callOperations = customerData.calls.map((call) => {
 			call._id = call._id || new mongoose.Types.ObjectId();
 			callIds.push(call._id);
@@ -157,16 +157,16 @@ class CustomerServices {
 			};
 		});
 
-    // delete calls
-    customer.calls.forEach(callId => {
-      if(!callIds.includes(callId.toString())) {
-        callOperations.push({
-          deleteOne: {
-            filter: { _id: callId }
-          }
-        })
-      }
-    })
+		// delete calls
+		customer.calls.forEach((callId) => {
+			if (!callIds.includes(callId.toString())) {
+				callOperations.push({
+					deleteOne: {
+						filter: { _id: callId },
+					},
+				});
+			}
+		});
 
 		const callsResult = await CallModel.bulkWrite(callOperations);
 
@@ -204,22 +204,19 @@ class CustomerServices {
 		);
 	}
 
-  static async deleteSingleCustomer(customerId) {
-    await CustomerModel.findByIdAndDelete(customerId);
+	static async deleteSingleCustomer(customerId) {
+		await CustomerModel.findByIdAndDelete(customerId);
 		await CallModel.deleteMany({ customer: customerId });
-		await UserModel.updateMany(
-			{ customers: customerId },
-			{ $pull: { customers: customerId } }
-		);
-  }
+		await UserModel.updateMany({ customers: customerId }, { $pull: { customers: customerId } });
+	}
 
-  static async toggleCustomerStatus(customerId) {
-    const customer = await CustomerModel.findById(customerId)
-    customer.status = customer.status === "active" ? "cold" : "active"
-    await customer.save()
-    
-    return customer.status
-  } 
+	static async toggleCustomerStatus(customerId) {
+		const customer = await CustomerModel.findById(customerId);
+		customer.status = customer.status === "active" ? "cold" : "active";
+		await customer.save();
+
+		return customer.status;
+	}
 }
 
 export default CustomerServices;

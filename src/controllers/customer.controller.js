@@ -12,7 +12,7 @@ class CustomerController {
   }
 
   static async getSingleCustomer(req, res) {
-    const customer = await CustomerServices.getSingleCustomer(req.params.id)
+    const customer = await CustomerServices.getSingleCustomer(req.session.userId, req.params.id)
     return res.status(200).send({ success: true, customer })
   }
 
