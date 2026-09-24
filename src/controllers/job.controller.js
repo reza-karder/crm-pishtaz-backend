@@ -20,6 +20,11 @@ class JobController {
     await JobServices.deleteJob(req.params.id)
     return res.status(200).send({ success: true })
   }
+
+  static async getAdminJobs(req, res) {
+    const result = await JobServices.getAdminJobs(req.query)
+    return res.status(200).send({ success: true, ...result })
+  }
 }
 
 export default JobController

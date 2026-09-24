@@ -7,13 +7,20 @@ import { createJobValidator, updateJobValidator } from "../validators/job.valida
 
 const router = Router();
 
+router.get(
+	"/jobs/all",
+	requireAuthMiddleWare,
+	catchAsync(JobController.getAllJobs)
+);
+
 // ==============================
 // admin role routes
 // ==============================
 router.get(
 	"/jobs",
 	requireAuthMiddleWare,
-	catchAsync(JobController.getAllJobs)
+  requireRoleMiddleWare("admin"),
+	catchAsync(JobController.getAdminJobs)
 );
 
 router.post(

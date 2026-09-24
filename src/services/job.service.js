@@ -16,9 +16,25 @@ class JobServices {
 		return job;
 	}
 
-  static async deleteJob(jobId) {
-    await JobModel.findByIdAndDelete(jobId)
-  }
+	static async deleteJob(jobId) {
+		await JobModel.findByIdAndDelete(jobId);
+	}
+
+	static async getAdminJobs(queries) {
+		const search = queries.search || "";
+
+		const page = Number(queries.page) || 1;
+		const limit = 15;
+		const skip = (page - 1) * limit;
+
+		const options = { title: { $ne: "سایر", $regex: search, $options: "i" } };
+		const [jobs, totalJobs] = await Promise.all([
+			JobModel.find(options).limit(limit).skip(skip),
+			JobModel.countDocuments(options),
+		]);
+
+		return { jobs, totalJobs, totalPages: Math.ceil(totalJobs / limit), limit };
+	}
 }
 
 export default JobServices;
