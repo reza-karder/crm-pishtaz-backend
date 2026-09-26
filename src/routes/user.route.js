@@ -86,7 +86,7 @@ router.post(
   catchAsync(UserController.createUser)
 )
 
-router.delete(
+router.post(
   "/users/:id",
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),

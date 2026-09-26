@@ -73,12 +73,15 @@ class UserServices {
 	static async getUserStats(userId) {
     const user = await UserServices.getUser(userId)
 		const calls = await CallServices.getAllOwnCalls(userId);
+    const doneCalls = calls.filter(call => call.status === "done")
 
 		const stats = {
 			allCallsCount: getScheduledCallsOfDay(new Date(), calls).length,
 			customersCount: user.customers.length,
 			callsOfLast7Days: getCallsOfLast7Days(calls),
 			todayCalls: getScheduledCallsOfDay(new Date(), calls),
+      doneCallsCount: doneCalls.length,
+      callsCount: calls.length
 		};
 
 		return { stats, user };

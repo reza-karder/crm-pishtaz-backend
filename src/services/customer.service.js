@@ -106,6 +106,7 @@ class CustomerServices {
 		);
 
 		const originEmployee = await UserModel.findById(originEmployeeId);
+    console.log(originEmployeeId);
 		await UserModel.findByIdAndUpdate(destinationEmployeeId, {
 			$push: { customers: originEmployee.customers },
 		});

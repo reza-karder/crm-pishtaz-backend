@@ -36,7 +36,7 @@ class UserController {
 	}
 
 	static async getAllUsers(req, res) {
-		const users = await UserServices.getUsersByFilter();
+		const users = await UserServices.getUsersByFilter({ _id: { $ne: req.session.userId } });
 		return res.status(200).send({ success: true, users });
 	}
 
@@ -61,6 +61,12 @@ class UserController {
 	static async createUser(req, res) {
 		const user = await UserServices.createUser(req.body);
 		return res.status(200).send({ success: true, user });
+	}
+
+	static async deleteUser(req, res) {
+		await CustomerServices.transferAllCustomers(req.params.id, req.body.substituteEmployeeId);
+		await UserServices.deleteUser(req.params.id);
+		res.status(200).send({ success: true, message: "کارمند با موفقیت حذف شد" });
 	}
 }
 
