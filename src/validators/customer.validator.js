@@ -12,12 +12,13 @@ const VALID_QUERIES = {
 };
 
 const callValidator = Joi.object({
-	notes: Joi.string().optional().allow(""),
+	notes: Joi.string().optional().allow("").trim(),
 	status: Joi.string()
 		.valid(...CALL_STATUS)
-		.required(),
+		.required()
+		.trim(),
 	date: Joi.date().required(),
-	_id: Joi.string().optional(),
+	_id: Joi.string().optional().trim(),
 });
 
 const productValidator = Joi.object({
@@ -29,12 +30,12 @@ const productValidator = Joi.object({
 });
 
 const createCustomerValidator = Joi.object({
-	name: Joi.string().required(),
-	phonePrimary: Joi.string().required().regex(PHONE_REGEX),
-	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX),
-	email: Joi.string().required().allow("").email(),
-	notes: Joi.string().optional().allow(""),
-	address: Joi.string().optional().allow(""),
+	name: Joi.string().required().trim(),
+	phonePrimary: Joi.string().required().regex(PHONE_REGEX).trim(),
+	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX).trim(),
+	email: Joi.string().required().allow("").email().trim(),
+	notes: Joi.string().optional().allow("").trim(),
+	address: Joi.string().optional().allow("").trim(),
 	job: Joi.string().optional(),
 	status: Joi.string()
 		.optional()
@@ -44,12 +45,12 @@ const createCustomerValidator = Joi.object({
 });
 
 const updateCustomerValidator = Joi.object({
-	name: Joi.string().optional(),
-	phonePrimary: Joi.string().optional().regex(PHONE_REGEX),
-	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX),
-	email: Joi.string().optional().allow("").email(),
-	notes: Joi.string().optional().allow(""),
-	address: Joi.string().optional().allow(""),
+	name: Joi.string().optional().trim(),
+	phonePrimary: Joi.string().optional().regex(PHONE_REGEX).trim(),
+	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX).trim(),
+	email: Joi.string().optional().allow("").email().trim(),
+	notes: Joi.string().optional().allow("").trim(),
+	address: Joi.string().optional().allow("").trim(),
 	job: Joi.string().optional(),
 	status: Joi.string()
 		.optional()
@@ -64,36 +65,38 @@ const transferCustomerValidator = Joi.object({
 });
 
 const customerQueryParamsValidator = Joi.object({
-	search: Joi.string().optional().allow(""),
+	search: Joi.string().optional().allow("").trim(),
 	sort: Joi.string()
 		.optional()
-		.valid(...VALID_QUERIES.sort),
-	purchasedProduct: Joi.string().optional(),
-	potentialProduct: Joi.string().optional(),
-	job: Joi.string().optional(),
+		.valid(...VALID_QUERIES.sort)
+		.trim(),
+	purchasedProduct: Joi.string().optional().trim(),
+	potentialProduct: Joi.string().optional().trim(),
+	job: Joi.string().optional().trim(),
 	status: Joi.string()
 		.optional()
-		.valid(...VALID_QUERIES.status),
+		.valid(...VALID_QUERIES.status)
+		.trim(),
 	date: Joi.string()
 		.optional()
 		.valid(...VALID_QUERIES.date),
 	call: Joi.string()
 		.optional()
-		.valid(...VALID_QUERIES.call),
+		.valid(...VALID_QUERIES.call)
+		.trim(),
 	page: Joi.string().optional(),
 });
 
 const deleteManyCustomersValidator = Joi.object({
-  mode: Joi.string().required().valid("all", "explicit"),
-  excludedIds: Joi.array().optional(),
-  selectedIds: Joi.array().optional()
-})
+	mode: Joi.string().required().valid("all", "explicit").trim(),
+	excludedIds: Joi.array().optional(),
+	selectedIds: Joi.array().optional(),
+});
 
 export {
 	createCustomerValidator,
 	updateCustomerValidator,
 	transferCustomerValidator,
 	customerQueryParamsValidator,
-  deleteManyCustomersValidator
-
+	deleteManyCustomersValidator,
 };

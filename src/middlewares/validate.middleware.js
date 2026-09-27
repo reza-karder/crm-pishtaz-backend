@@ -1,6 +1,6 @@
 function validateMiddleWare(schema, segment = "body") {
   return (req, res, next) => {
-    const { error } = schema.validate(req[segment], {
+    const { error, value } = schema.validate(req[segment], {
       abortEarly: false,
       stripUnknown: true,
     })
@@ -10,6 +10,7 @@ function validateMiddleWare(schema, segment = "body") {
       return res.status(400).send({success: false, details})
     }
 
+    req[segment] = value
     next()
   }
 }
