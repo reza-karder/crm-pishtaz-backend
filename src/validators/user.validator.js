@@ -10,7 +10,8 @@ const createUserValidator = Joi.object({
 	phone: Joi.string()
 		.required()
 		.regex(/^09\d{9}$/)
-		.trim(),
+		.trim()
+    .allow(""),
 	password: Joi.string().required().regex(PASSWORD_REGEX),
 });
 

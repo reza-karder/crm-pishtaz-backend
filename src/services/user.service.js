@@ -17,6 +17,9 @@ class UserServices {
 			throw ApiError.badRequest("این ایمیل از قبل وجود دارد");
 		}
 
+    if(!userData.phone && userData.phone !== undefined) {
+      return
+    }
 		// check phone unique
 		const isPhoneDuplicated = await UserModel.exists({
 			phone: userData.phone,

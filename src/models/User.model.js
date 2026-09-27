@@ -10,7 +10,7 @@ const UserSchema = mongoose.Schema(
 		password: { type: String, required: true },
 		customers: [{ type: mongoose.Types.ObjectId, ref: "Customer" }],
 		role: { type: String, enum: ROLES, default: "employee" },
-    phone: { type: String, unique: true },
+    phone: { type: String },
     status: { type: String, enum: STATUS, default: "active" }
 	},
 	{ timestamps: true },
