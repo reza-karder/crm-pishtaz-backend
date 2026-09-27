@@ -3,7 +3,7 @@ import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/aut
 import JobController from "../controllers/job.controller.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { createJobValidator, updateJobValidator } from "../validators/job.validator.js";
+import { createJobValidator, jobsQueryValidator, updateJobValidator } from "../validators/job.validator.js";
 
 const router = Router();
 
@@ -20,6 +20,7 @@ router.get(
 	"/jobs",
 	requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
+  validateMiddleWare(jobsQueryValidator, "query"),
 	catchAsync(JobController.getAdminJobs)
 );
 

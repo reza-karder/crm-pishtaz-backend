@@ -3,7 +3,7 @@ import { requireAuthMiddleWare, requireRoleMiddleWare } from "../middlewares/aut
 import ProductController from "../controllers/product.controller.js";
 import { catchAsync } from "../utils/errorHandler.js";
 import validateMiddleWare from "../middlewares/validate.middleware.js";
-import { createProductValidator, updateProductValidator } from "../validators/product.validator.js";
+import { createProductValidator, productsQueryValidator, updateProductValidator } from "../validators/product.validator.js";
 
 const router = Router();
 
@@ -21,6 +21,7 @@ router.get(
   "/products",
   requireAuthMiddleWare,
   requireRoleMiddleWare("admin"),
+  validateMiddleWare(productsQueryValidator, "query"),
   catchAsync(ProductController.getAdminProducts)
 )
 

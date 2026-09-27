@@ -6,11 +6,14 @@ function validateMiddleWare(schema, segment = "body") {
     })
     
     if(error) {
+      console.log(error);
       const details = error.details.map(detail => detail.message)
       return res.status(400).send({success: false, details})
     }
 
-    req[segment] = value
+    if(segment = "body") {
+      req.body = value
+    }
     next()
   }
 }

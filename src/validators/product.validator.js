@@ -10,7 +10,13 @@ const updateProductValidator = Joi.object({
   price: Joi.number().optional()
 })
 
+const productsQueryValidator = Joi.object({
+  search: Joi.string().trim().optional().allow(""),
+  page: Joi.optional()
+})
+
 export {
   createProductValidator,
-  updateProductValidator
+  updateProductValidator,
+  productsQueryValidator
 }

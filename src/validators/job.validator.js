@@ -8,4 +8,9 @@ const updateJobValidator = Joi.object({
 	title: Joi.string().optional().trim(),
 });
 
-export { createJobValidator, updateJobValidator };
+const jobsQueryValidator = Joi.object({
+	search: Joi.string().trim().optional().allow(""),
+	page: Joi.optional(),
+});
+
+export { createJobValidator, updateJobValidator, jobsQueryValidator };
