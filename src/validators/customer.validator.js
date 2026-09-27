@@ -3,6 +3,7 @@ import Joi from "joi";
 const PHONE_REGEX = /^09\d{9}$/;
 const CALL_STATUS = ["scheduled", "done", "rejected", "unanswered"];
 const CUSTOMER_STATUS = ["active", "cold"];
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const VALID_QUERIES = {
 	sort: ["all", "newest", "oldest", "name"],
@@ -33,7 +34,7 @@ const createCustomerValidator = Joi.object({
 	name: Joi.string().required().trim(),
 	phonePrimary: Joi.string().required().regex(PHONE_REGEX).trim(),
 	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX).trim(),
-	email: Joi.string().required().allow("").email().trim(),
+	email: Joi.string().required().allow("").regex(EMAIL_REGEX).trim(),
 	notes: Joi.string().optional().allow("").trim(),
 	address: Joi.string().optional().allow("").trim(),
 	job: Joi.string().optional(),
@@ -48,7 +49,7 @@ const updateCustomerValidator = Joi.object({
 	name: Joi.string().optional().trim(),
 	phonePrimary: Joi.string().optional().regex(PHONE_REGEX).trim(),
 	phoneSecondary: Joi.string().optional().allow("").regex(PHONE_REGEX).trim(),
-	email: Joi.string().optional().allow("").email().trim(),
+	email: Joi.string().optional().allow("").regex(EMAIL_REGEX).trim(),
 	notes: Joi.string().optional().allow("").trim(),
 	address: Joi.string().optional().allow("").trim(),
 	job: Joi.string().optional(),

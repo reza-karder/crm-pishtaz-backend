@@ -1,10 +1,11 @@
 import Joi from "joi";
 
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const createUserValidator = Joi.object({
 	name: Joi.string().required().trim(),
-	email: Joi.string().required().email().trim(),
+	email: Joi.string().required().regex(EMAIL_REGEX).trim(),
 	role: Joi.string().optional().valid("employee", "admin"),
 	phone: Joi.string()
 		.required()
@@ -15,7 +16,7 @@ const createUserValidator = Joi.object({
 
 const updateUserValidator = Joi.object({
 	name: Joi.string().optional().trim(),
-	email: Joi.string().optional().email().trim(),
+	email: Joi.string().optional().regex(EMAIL_REGEX).trim(),
 	phone: Joi.string()
 		.optional()
 		.regex(/^09\d{9}$/)
