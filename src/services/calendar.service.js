@@ -11,7 +11,7 @@ class CalendarService {
 	static async getCallsInRange(employeeId, startDate, endDate) {
 		const calls = await CallServices.getAllOwnCalls(employeeId, {
 			status: "scheduled",
-			date: { $gte: normalizeStartDate(startDate), $lte: normalizeEndDate(endDate) },
+			date: { $gte: normalizeStartDate(startDate), $lt: normalizeEndDate(endDate) },
 		});
 
 		return sortCallsByDay(calls, normalizeStartDate(startDate), normalizeEndDate(endDate));
