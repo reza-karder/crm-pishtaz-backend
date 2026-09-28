@@ -61,7 +61,7 @@ class UserController {
 
 	static async createUser(req, res) {
 		const user = await UserServices.createUser(req.body);
-		return res.status(200).send({ success: true, user });
+		return res.status(200).send({ success: true, user, message: "کارمند با موفقیت اضافه شد" });
 	}
 
 	static async deleteUser(req, res) {

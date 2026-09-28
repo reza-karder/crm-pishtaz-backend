@@ -39,7 +39,7 @@ class CustomerController {
   static async transferSingleCustomer(req, res) {
     const { destinationEmployeeId, customerId } = req.body
     await CustomerServices.transferSingleCustomer(customerId, req.session.userId, destinationEmployeeId)
-    return res.status(200).send({ success: true })
+    return res.status(200).send({ success: true, message: "مشتری انتقال داده شد" })
   }
 
   static async toggleCustomerStatus(req, res) {
