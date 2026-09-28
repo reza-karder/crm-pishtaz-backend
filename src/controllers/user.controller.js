@@ -30,6 +30,7 @@ class UserController {
 	static async getAllActiveUsers(req, res) {
 		const users = await UserServices.getUsersByFilter({
 			status: "active",
+      role: "employee",
 			_id: { $ne: req.session.userId },
 		});
 		return res.status(200).send({ success: true, users });

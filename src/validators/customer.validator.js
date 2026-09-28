@@ -24,6 +24,7 @@ const callValidator = Joi.object({
 
 const productValidator = Joi.object({
 	type: Joi.string().required().valid("purchased", "potential"),
+  product: Joi.string().required(),
 	price: Joi.number().optional().allow(""),
 	intentionScore: Joi.number().valid(1, 2, 3, 4, 5),
 	quantity: Joi.number().integer(),

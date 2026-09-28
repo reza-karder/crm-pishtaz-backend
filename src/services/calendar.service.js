@@ -14,12 +14,17 @@ class CalendarService {
 			date: { $gte: normalizeStartDate(startDate), $lte: normalizeEndDate(endDate) },
 		});
 
-		return sortCallsByDay(calls, startDate, endDate);
+		return sortCallsByDay(calls, normalizeStartDate(startDate), normalizeEndDate(endDate));
 	}
 
 	static async getCallsOfDay(employeeId, date) {
+    const startDate = normalizeDate(date)
+		let endDate = new Date(date);
+		endDate.setDate(endDate.getDate() + 1)
+    endDate = normalizeDate(endDate)
+
 		const calls = await CallServices.getAllOwnCalls(employeeId, {
-			date: { $gte: normalizeStartDate(date), $lte: normalizeEndDate(date) },
+			date: { $gte: startDate, $lt: endDate },
 		});
 
 		return calls;
