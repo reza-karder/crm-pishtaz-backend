@@ -19,6 +19,7 @@ export default function createApp() {
   app.use(express.json());
   app.use(cookieParser());
 
+  app.set("trust proxy", 1);
   app.use(
     session({
       secret: env.sessionSecret,
@@ -31,8 +32,9 @@ export default function createApp() {
       }),
       cookie: {
         httpOnly: true,
-        secure: env.nodeEnv === "PRODUCTION",
-        sameSite: 'lax',
+        secure: env.nodeEnv === "production",
+        sameSite: 'none',
+        path: "/",
         maxAge: env.sessionMaxAgeMs,
       },
     })
