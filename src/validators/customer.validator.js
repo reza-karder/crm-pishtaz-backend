@@ -27,7 +27,7 @@ const productValidator = Joi.object({
   product: Joi.string().required(),
 	price: Joi.number().optional().allow(""),
 	intentionScore: Joi.number().valid(1, 2, 3, 4, 5),
-	quantity: Joi.number().integer(),
+	quantity: Joi.number().optional().allow("").integer(),
 	_id: Joi.string().optional(),
 });
 
